@@ -10,10 +10,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>study-common</module>
-        <module>study-movie</module>
         <module>study-news</module>
-        <module>study-game</module>
-        <module>study-index</module>
         <module>study-jenkinsK8s</module>
     </modules>
 
