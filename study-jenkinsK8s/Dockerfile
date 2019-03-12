@@ -4,6 +4,6 @@ MAINTAINER study-jenkinsK8s
 RUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 RUN echo "Asia/shanghai" > /etc/timezone
 
-CMD ["nohup", "java", "-jar", "/app/study-jenkinsK8s-1.0-SNAPSHOT.jar", ">", "/dev/null", "&"]
+ADD study-jenkinsK8s/target/*.jar /app/study-jenkinsK8s.jar
+CMD ["nohup", "java", "-jar", "/app/study-jenkinsK8s.jar", ">", "/dev/null", "&"]
 
-EXPOSE 8021
