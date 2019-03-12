@@ -8,8 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author dell
  */
 @SpringBootApplication(scanBasePackages = {"test.study"})
-public class StudyJenkinsK8sApplication {
+public class StudyJenkinsk8sApplication {
     public static void main(String[] args){
-        SpringApplication.run(StudyJenkinsK8sApplication.class,args);
+        SpringApplication.run(StudyJenkinsk8sApplication.class,args);
     }
 }
