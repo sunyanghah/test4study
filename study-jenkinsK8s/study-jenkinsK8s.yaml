@@ -1,29 +1,29 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: study-jenkinsK8s
+  name: study-jenkinsk8s
   labels:
-    app: study-jenkinsK8s
+    app: study-jenkinsk8s
 spec:
   replicas: 2
   template:
     metadata:
       labels:
-        app: study-jenkinsK8s
+        app: study-jenkinsk8s
     spec:
       terminationGracePeriodSeconds: 60
       containers:
       - name: study-news
-        image: 47.94.159.51/dev/study-jenkinsK8s_image:latest
+        image: 47.94.159.51/dev/study-jenkinsk8s_image:latest
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: study-jenkinsK8s
+  name: study-jenkinsk8s
   labels:
-    name: study-jenkinsK8s
+    name: study-jenkinsk8s
 spec:
   ports:
   - port: 8021
   selector:
-    name: study-jenkinsK8s
+    name: study-jenkinsk8s

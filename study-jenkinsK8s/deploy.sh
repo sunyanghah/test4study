@@ -1,6 +1,6 @@
 #!/bin/bash
 
-serverName=study-jenkinsK8s
+serverName=study-jenkinsk8s
 workDir=/mnt/k8sApp/$serverName
 imageRepertory=47.94.159.51/dev
 serverVersion=latest

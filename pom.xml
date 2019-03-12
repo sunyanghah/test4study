@@ -11,7 +11,7 @@
     <modules>
         <module>study-common</module>
         <module>study-news</module>
-        <module>study-jenkinsK8s</module>
+        <module>study-jenkinsk8s</module>
     </modules>
 
     <properties>

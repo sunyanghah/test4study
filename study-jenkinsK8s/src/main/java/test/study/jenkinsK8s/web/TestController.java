@@ -1,4 +1,4 @@
-package test.study.jenkinsK8s.web;
+package test.study.jenkinsk8s.web;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

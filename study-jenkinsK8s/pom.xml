@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>study-jenkinsK8s</artifactId>
+    <artifactId>study-jenkinsk8s</artifactId>
 
     <properties>
         <mybatisplus-spring-boot-starter.version>3.0.7.1</mybatisplus-spring-boot-starter.version>
