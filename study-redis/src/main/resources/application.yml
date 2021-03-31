@@ -1,0 +1,8 @@
+server:
+  port: 8089
+
+spring:
+  redis:
+    cluster.nodes: 212.64.40.52:7000,212.64.40.52:7001,212.64.40.52:7002,212.64.40.52:7003,212.64.40.52:7004,212.64.40.52:7005
+    cluster.max-redirects: 3
+    queue.timeout: 3000

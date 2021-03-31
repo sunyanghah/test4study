@@ -1,0 +1,26 @@
+server:
+  port: 8012
+
+spring:
+  application:
+    name: study-stomp
+  thymeleaf:
+    mode: HTML5
+    prefix: classpath:/html/
+    suffix: .html
+    encoding: UTF-8
+    servlet:
+      content-type: text/html
+    cache: false
+  rabbitmq:
+    host: 212.64.40.52
+    port: 5672
+    username: guest
+    password: guest
+    # 消息发送确认，确保消息发送到交换机
+    publisher-confirms: true
+    # 消息发送确认，确保消息到了队列，只有失败时触发
+    publisher-returns: true
+    listener:
+      simple:
+        acknowledge-mode: AUTO

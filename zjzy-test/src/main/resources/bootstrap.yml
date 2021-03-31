@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: zjzy-test
+  profiles:
+    active: dev

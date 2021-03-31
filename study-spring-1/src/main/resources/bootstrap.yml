@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: study-spring-1
+  profiles:
+    active: dev

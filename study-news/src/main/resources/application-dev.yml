@@ -6,9 +6,9 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://39.105.65.204:3306/test4study?useSSL=false&&characterEncoding=utf-8&&serverTimezone=Hongkong
+    url: jdbc:mysql://212.64.40.52:3306/test4study?useSSL=false&&characterEncoding=utf-8&&serverTimezone=Hongkong
     username: root
-    password: 1qa@WS
+    password: dasheng1sGreat!
     hikari:
       # 一个连接的生命时长（毫秒），超时而且没被使用则被释放（retired），缺省:30分钟，建议设置比数据库超时时长少30秒以上
       maxLifetime: 1765000
