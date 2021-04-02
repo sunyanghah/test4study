@@ -25,6 +25,7 @@
         <module>study-quartz</module>
         <module>study-mysql</module>
         <module>study-observation</module>
+        <module>study-zookeeper</module>
     </modules>
 
     <properties>
