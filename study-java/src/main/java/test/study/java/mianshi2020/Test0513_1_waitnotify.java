@@ -19,25 +19,7 @@ public class Test0513_1_waitnotify {
          */
         Object object = new Object();
 
-        new Thread(()->{
-            synchronized (object) {
-                for (char c : aC) {
-                    System.out.print(c);
-                    try {
-                        object.notify();
-                        object.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                object.notify();
-            }
-        }).start();
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
         new Thread(()->{
             synchronized (object) {
                 for (char c : aI) {
@@ -53,6 +35,22 @@ public class Test0513_1_waitnotify {
             }
         }).start();
 
+
+
+        new Thread(()->{
+            synchronized (object) {
+                for (char c : aC) {
+                    System.out.print(c);
+                    try {
+                        object.notify();
+                        object.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                object.notify();
+            }
+        }).start();
 
     }
 

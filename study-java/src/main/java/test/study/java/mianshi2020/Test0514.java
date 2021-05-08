@@ -22,6 +22,8 @@ public class Test0514 {
         map.put(null,"123");
         System.out.println(map.containsKey(null)); // true
         Map map2 = new HashMap<>();
+        map2.put("1","a");
         System.out.println(map2.containsKey(null)); // false
     }
+
 }

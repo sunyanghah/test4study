@@ -1,0 +1,7 @@
+server:
+  port: 6668
+
+em:
+  app-key: 1101210414051023#demo
+  client-id: YXA6iXCkwdf4S02dg2U-VIzWbA
+  client-secret: YXA66XzrqMEAEfht1-kjnSUo6TXgUyE
