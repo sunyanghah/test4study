@@ -1,6 +1,7 @@
 package test.rabbitmq.web;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -99,6 +100,29 @@ public class MqTestController {
         return RP.buildSuccess("success");
     }
 
+
+    @GetMapping("/5")
+    public RP test5() throws Exception{
+
+        // 到达交换机即触发
+        rabbitTemplate.setConfirmCallback((correlationData, ack, cause) -> {
+            System.out.println("消息唯一标识："+correlationData);
+            System.out.println("确认结果："+ack);
+            System.out.println("失败原因："+cause);
+        });
+
+        // 未进入队列时触发
+        rabbitTemplate.setReturnCallback((message, replyCode, replyText, exchange, routingKey) -> {
+            System.out.println("消息主体 message : "+message);
+            System.out.println("code : "+replyCode);
+            System.out.println("描述："+replyText);
+            System.out.println("消息使用的交换器 exchange : "+exchange);
+            System.out.println("消息使用的路由键 routing : "+routingKey);
+        });
+
+        rabbitTemplate.convertAndSend("hello222","sdfsadfasfas");
+        return RP.buildSuccess("success");
+    }
 
 //    @PostMapping("/pro")
 //    public RP test5(@RequestBody String name) throws Exception{

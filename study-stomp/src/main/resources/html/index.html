@@ -3,10 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <title>首页</title>
+    <script type="application/javascript" src="http://cdn.bootcss.com/stomp.js/2.3.3/stomp.min.js"></script>
+    <script>
+
+
+        // 建立连接对象（还未发起连接）
+        var socket=new WebSocket('ws://' + window.location.hostname + ':' + window.location.port + '/xxv-cn002412p-websocket');
+
+        // var socket=new WebSocket('ws://10.100.44.28:1995/customer/bj-metro-server-customer');
+
+        // 获取 STOMP 子协议的客户端对象
+        var stompClient = Stomp.over(socket);
+
+        // 向服务器发起websocket连接并发送CONNECT帧
+        stompClient.connect(
+            {},
+            function connectCallback (frame) {
+                // 连接成功时（服务器响应 CONNECTED 帧）的回调方法
+                console.log("连接成功");
+                console.log('已连接【' + frame + '】');
+                // stompClient.subscribe('/topic/railcar_info', function (response) {
+                //     document.getElementById("railcarInfo").innerHTML = response.body;
+                // });
+                //
+                // stompClient.subscribe('/topic/alarm',function (response) {
+                //     document.getElementById("alarm").innerHTML = response.body;
+                // });
+
+                stompClient.subscribe('/topic/vehicle_location',function (response) {
+                    document.getElementById("railcarInfo").innerHTML = response.body;
+                });
+
+            },
+            function errorCallBack (error) {
+                // 连接失败时（服务器响应 ERROR 帧）的回调方法
+                console.log('连接失败【' + error + '】');
+            }
+        );
+
+    </script>
 </head>
 <body>
+<label>车辆信息推过来的数据</label>
+<div id="railcarInfo"></div>
 
-this is index page.
+<br>
+<label>告警推过来的数据</label>
+<div id="alarm"></div>
+
 
 </body>
 </html>

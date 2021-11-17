@@ -28,6 +28,15 @@
         <module>study-zookeeper</module>
         <module>study-nacos</module>
         <module>study-im-server</module>
+        <module>study-schedule</module>
+        <module>study-webflux</module>
+        <module>study-dataway</module>
+        <module>study-shiro-1</module>
+        <module>study-shiro-2</module>
+        <module>study-shiro-3</module>
+        <module>study-shiro-4</module>
+        <module>study-shiro-5</module>
+        <module>study-stomp2</module>
     </modules>
 
     <properties>
@@ -45,7 +54,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>${fastjson.version}</version>
+            <version>1.2.76</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

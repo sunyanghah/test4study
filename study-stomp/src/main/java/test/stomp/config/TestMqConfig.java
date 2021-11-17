@@ -12,7 +12,7 @@ import java.util.Map;
  * @Date 2020/10/9
  */
 @Configuration
-public class TestMqConfig {
+public class    TestMqConfig {
 
 
     /////////////TOPIC交换机///////////////

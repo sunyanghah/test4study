@@ -13,7 +13,7 @@ spring:
       content-type: text/html
     cache: false
   rabbitmq:
-    host: 212.64.40.52
+    host: 82.156.172.114
     port: 5672
     username: guest
     password: guest
@@ -21,6 +21,15 @@ spring:
     publisher-confirms: true
     # 消息发送确认，确保消息到了队列，只有失败时触发
     publisher-returns: true
+#    virtual-host: xxv
     listener:
       simple:
         acknowledge-mode: AUTO
+
+xxv:
+  rabbitmq-stomp:
+    host: ${spring.rabbitmq.host}
+    port: 61613
+    username: ${spring.rabbitmq.username}
+    password: ${spring.rabbitmq.password}
+#    virtual-host: ${spring.rabbitmq.virtual-host}

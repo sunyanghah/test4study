@@ -65,7 +65,6 @@ public class TestController {
         CsvMapper csvMapper = new CsvMapper();
 
         CsvFactory factory = csvMapper.getFactory();
-        factory.configure()
         System.out.println("------");
 
 //        CsvSchema csvSchema = CsvSchema.builder()

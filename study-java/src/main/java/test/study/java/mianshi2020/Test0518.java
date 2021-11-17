@@ -120,6 +120,8 @@ public class Test0518 {
             if (num > max){
                 second = max;
                 max = num;
+            }else if(num > second){
+                second = num;
             }
         }
         return second;
