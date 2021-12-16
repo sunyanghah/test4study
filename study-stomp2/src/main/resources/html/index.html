@@ -13,7 +13,8 @@
         // 获取 STOMP 子协议的客户端对象
         // var stompClient = Stomp.over(socket);
 
-        var stompClient = Stomp.client('ws://10.100.44.28:8012/bj-metro');
+        var stompClient = Stomp.client('ws://localhost:1997/producer/bj-metro-server-producer');
+        // var stompClient = Stomp.client('ws://10.100.31.48:8012/bj-metro');
 
         // 向服务器发起websocket连接并发送CONNECT帧
         stompClient.connect(
@@ -23,20 +24,11 @@
                 console.log("连接成功");
                 console.log('已连接【' + frame + '】');
 
-                stompClient.subscribe('/topic/vehicle_location',function (response) {
+                stompClient.subscribe('/topic/railcar_location',function (response) {
                     document.getElementById("railcarInfo").innerHTML = response.body;
-                });
-
-                stompClient.subscribe('/vehicle_location',function (response) {
-                    document.getElementById("railcarInfo").innerHTML = response.body;
-                });
-
-                stompClient.subscribe('/bj-metro/vehicle_location',function (response) {
-                    document.getElementById("railcarInfo").innerHTML = response.body;
-                });
-
-                stompClient.subscribe('/bj-metro/topic/vehicle_location',function (response) {
-                    document.getElementById("railcarInfo").innerHTML = response.body;
+                    var timestamp=new Date().getTime();
+                    console.log("---------------------"+timestamp);
+                    console.log(response.body);
                 });
 
             },

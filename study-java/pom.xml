@@ -55,6 +55,25 @@
             <artifactId>commons-lang3</artifactId>
         </dependency>
 
+        <!-- 加密开始 -->
+<!--        <dependency>-->
+<!--            <groupId>com.github.core-lib</groupId>-->
+<!--            <artifactId>xjar</artifactId>-->
+<!--            <version>4.0.2</version>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>1.18</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.core-lib</groupId>
+            <artifactId>loadkit</artifactId>
+            <version>v1.0.1</version>
+        </dependency>
+
+        <!-- 加密结束 -->
+
     </dependencies>
 
 

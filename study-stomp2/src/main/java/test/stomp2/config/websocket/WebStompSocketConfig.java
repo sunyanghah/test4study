@@ -6,6 +6,8 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
+import javax.annotation.Resource;
+
 /**
  * @author sunYang
  * @date 2021/11/17 16:09
@@ -14,12 +16,15 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker
 public class WebStompSocketConfig implements WebSocketMessageBrokerConfigurer {
 
+    @Resource
+    private MyHandshakeHandler myHandshakeHandler;
+
     @Override
     //注册STOMP协议的节点(endpoint),并映射指定的url
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         //注册一个STOMP的endpoint,并指定使用SockJS协议
-        registry.addEndpoint("/bj-metro").setAllowedOrigins("*")
-                .addInterceptors(new SessionAuthHandshakeInterceptor())
+        registry.addEndpoint("/bj-metro").setHandshakeHandler(myHandshakeHandler).setAllowedOrigins("*")
+//                .addInterceptors(new SessionAuthHandshakeInterceptor())
 //        .withSockJS()
         ;
     }
