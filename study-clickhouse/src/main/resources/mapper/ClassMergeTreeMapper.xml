@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="test.study.clickhouse.dao.ClassMergeTreeDao">
+
+    <select id="testQuery2" resultType="ClassStudentDto">
+        select
+        c.id as classId,
+        c.name as className,
+        s2.id as studentId,
+        s2.code as studentCode,
+        s2.name as studentName,
+        s2.age as studentAge,
+        s2.address as studentAddress
+        from
+        class_merge_tree c
+        inner join
+        student_merge_tree2 s2
+        on
+        c.id = s2.class_id
+    </select>
+
+</mapper>

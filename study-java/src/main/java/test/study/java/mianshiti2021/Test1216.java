@@ -1,6 +1,6 @@
 package test.study.java.mianshiti2021;
 
-import java.util.BitSet;
+import java.util.*;
 
 /**
  * @author sunYang
@@ -26,6 +26,25 @@ public class Test1216 {
         System.out.println("----");
         System.out.println(bitSet.get(1));
         System.out.println(bitSet.get(2));
+
+
+        List<HashMap> hashMapList = Arrays.asList(new HashMap());
+
+        HashMap<Object, Object> map = new HashMap<>();
+
+        test(map);
+//        test2(hashMapList);
+
     }
+
+    private static void test(Map map){
+
+    }
+
+    private static void test2(List<Map> map){
+
+    }
+
+
 
 }

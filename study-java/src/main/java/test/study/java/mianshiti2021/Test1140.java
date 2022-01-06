@@ -18,11 +18,11 @@ public class Test1140 {
 
     public static void main(String[] args) throws Exception{
 
-        String applyCode = "b885456d7382ab9d6ad32dec7808a6ab";
+        String applyCode = "22486a01938e7afcf5cc6666844fcbdd";
 
         Integer maxStationNum = 400;
 
-        Long endTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2021-12-07 08:00:00").getTime();
+        Long endTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2021-12-29 08:00:00").getTime();
 
         Map<String,Object> map = new HashMap<>();
         map.put("applyCode",applyCode);

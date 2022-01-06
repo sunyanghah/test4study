@@ -38,6 +38,7 @@
         <module>study-shiro-5</module>
         <module>study-stomp2</module>
         <module>study-license</module>
+        <module>study-clickhouse</module>
     </modules>
 
     <properties>
