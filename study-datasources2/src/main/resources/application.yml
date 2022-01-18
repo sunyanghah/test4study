@@ -30,7 +30,11 @@ spring:
           url: jdbc:mysql://10.100.30.105:1541/test?useSSL=false&&characterEncoding=utf-8&&serverTimezone=Hongkong&&allowPublicKeyRetrieval=true
           username: uinnova
           password: Uinnova@123
-
+        clickhouse:
+          driver-class-name: com.github.housepower.jdbc.ClickHouseDriver
+          url: jdbc:clickhouse://10.100.31.48:9000/test0104
+          username:
+          password:
 
 mybatis-plus:
   mapper-locations: classpath:/mapper/*Mapper.xml

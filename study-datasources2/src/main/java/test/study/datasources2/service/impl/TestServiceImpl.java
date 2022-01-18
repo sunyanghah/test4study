@@ -5,9 +5,11 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import test.study.datasources2.config.IdGenerator;
+import test.study.datasources2.dao.ClassMergeTreeDao;
 import test.study.datasources2.dao.LineDao;
 import test.study.datasources2.dao.Test0105Dao;
 import test.study.datasources2.dao.Test1208Dao;
+import test.study.datasources2.entity.ClassMergeTree;
 import test.study.datasources2.entity.Line;
 import test.study.datasources2.entity.Test0105;
 import test.study.datasources2.entity.Test1208;
@@ -31,6 +33,8 @@ public class TestServiceImpl implements TestService {
     @Resource
     private LineDao lineDao;
     @Resource
+    private ClassMergeTreeDao classMergeTreeDao;
+    @Resource
     private IdGenerator idGenerator;
 
     @Override
@@ -42,6 +46,9 @@ public class TestServiceImpl implements TestService {
 
         List<Line> lineList = lineDao.selectList(Wrappers.emptyWrapper());
         result.addAll(lineList);
+
+        List<ClassMergeTree> classMergeTrees = classMergeTreeDao.selectList(Wrappers.emptyWrapper());
+        result.addAll(classMergeTrees);
 
         return result;
     }
