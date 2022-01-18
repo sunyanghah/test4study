@@ -52,7 +52,7 @@ public class CronSchedulerController {
 
     @GetMapping("/shutdown")
     public void shutdown() throws SchedulerException {
-        TriggerBuilder.newTrigger().withIdentity()
+//        TriggerBuilder.newTrigger().withIdentity()
         new StdSchedulerFactory().getScheduler().shutdown();
     }
 

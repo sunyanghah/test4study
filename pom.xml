@@ -39,6 +39,9 @@
         <module>study-stomp2</module>
         <module>study-license</module>
         <module>study-clickhouse</module>
+        <module>study-datasources</module>
+        <module>study-datasources2</module>
+        <module>study-datasources3</module>
     </modules>
 
     <properties>

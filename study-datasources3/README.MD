@@ -1,0 +1,6 @@
+JTA-ATOMIKOS 
+基于分包的方式
+分包的方式很好理解，就是讲多个数据源的XXMapper文件分在不同的包中，
+然后针对每一个数据源都会向Spring容器注入一个DataSource以及对应的SqlSessionFactory实例。
+这样如果有4个数据源，那么Spring最后容器中就会有4个独立的DataSource，以及4个独立的SqlSessionFactory实例。
+这样设计保证了数据源在dao层是完全隔离的，这是最简单直接且不容易出错的方法。
