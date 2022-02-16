@@ -1,4 +1,4 @@
-package test.stomp2.controller;
+package test.stomp3.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,9 +15,9 @@ public class WebPageController {
         return "index";
     }
 
-    @GetMapping(value = {"/index22"})
+    @GetMapping(value = {"/index2"})
     public String index22(){
-        return "index22";
+        return "index2";
     }
 
     @GetMapping(value = {"/index3"})

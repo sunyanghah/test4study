@@ -26,7 +26,7 @@ public class StompPushSchedule {
     public void test2() throws UnknownHostException {
         InetAddress addr = InetAddress.getLocalHost();
 
-        messagingTemplate.convertAndSend("/topic/vehicle_location", addr.getHostAddress());
+        messagingTemplate.convertAndSend("/topic/vehicle_location", System.currentTimeMillis());
 
     }
 

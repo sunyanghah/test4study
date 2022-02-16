@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <script type="application/javascript" src="http://cdn.bootcss.com/stomp.js/2.3.3/stomp.min.js"></script>
+    <script type="application/javascript" src="https://cdn.bootcdn.net/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <script>
+
+        var stompClient = Stomp.client('ws://localhost:8013/test0214');
+
+        // 向服务器发起websocket连接并发送CONNECT帧
+        stompClient.connect(
+            {},
+            function connectCallback (frame) {
+                // 连接成功时（服务器响应 CONNECTED 帧）的回调方法
+                console.log("连接成功");
+                console.log('已连接【' + frame + '】');
+
+                stompClient.subscribe('/topic/app/marco',function (response) {
+                    // 服务端@MessageMapping后的返回值将发送到这里
+                    document.getElementById("railcarInfo").innerHTML = response.body;
+                });
+
+                stompClient.subscribe('/topic/app/heartbeat',function (response) {
+                    // 服务端@MessageMapping后的返回值将发送到这里
+                    console.log("心跳成功---"+response.body);
+                });
+
+                stompClient.subscribe('/user/zhangsan/topic/testSendToUser',function (response) {
+                    // zhangsan监听
+                    document.getElementById("railcarInfo").innerHTML = response.body;
+                });
+            },
+            function errorCallBack (error) {
+                // 连接失败时（服务器响应 ERROR 帧）的回调方法
+                console.log('连接失败【' + error + '】');
+            }
+        );
+
+        function sendMsg() {
+            let clientId = document.getElementById("clientId").value;
+            let strJson = JSON.stringify({'message': clientId});
+            setInterval(function(){
+                let tx = stompClient.begin();
+                stompClient.send("/app/heartbeat", {transaction: tx.id}, strJson);
+                tx.commit();
+                },10000);
+
+        }
+
+    </script>
+</head>
+<body>
+<label>车辆信息推过来的数据</label>
+<div id="railcarInfo"></div>
+
+<br>
+<br>
+<input id="clientId" placeholder="终端名称">
+<input type="button" onclick="sendMsg()" value="点击发送">
+</body>
+</html>

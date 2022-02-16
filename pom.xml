@@ -42,6 +42,7 @@
         <module>study-datasources</module>
         <module>study-datasources2</module>
         <module>study-datasources3</module>
+        <module>study-stomp3</module>
     </modules>
 
     <properties>
