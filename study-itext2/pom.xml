@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>test4study</artifactId>
+        <groupId>test.study</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>study-itext2</artifactId>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>2.1.1.RELEASE</version>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.itextpdf</groupId>-->
+<!--            <artifactId>html2pdf</artifactId>-->
+<!--            <version>3.0.3</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.atlassian.commonmark</groupId>-->
+<!--            <artifactId>commonmark</artifactId>-->
+<!--            <version>0.14.0</version>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>com.atlassian.commonmark</groupId>-->
+<!--            <artifactId>commonmark-ext-gfm-tables</artifactId>-->
+<!--            <version>0.14.0</version>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>com.atlassian.commonmark</groupId>-->
+<!--            <artifactId>commonmark-ext-heading-anchor</artifactId>-->
+<!--            <version>0.14.0</version>-->
+<!--        </dependency>-->
+
+
+<!--        &lt;!&ndash; &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>com.vladsch.flexmark</groupId>-->
+<!--            <artifactId>flexmark</artifactId>-->
+<!--            <version>0.26.4</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.vladsch.flexmark</groupId>-->
+<!--            <artifactId>flexmark-util</artifactId>-->
+<!--            <version>0.26.4</version>-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash;表格渲染插件&ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>com.vladsch.flexmark</groupId>-->
+<!--            <artifactId>flexmark-ext-tables</artifactId>-->
+<!--            <version>0.26.4</version>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>com.youbenzi</groupId>-->
+<!--            <artifactId>MDTool</artifactId>-->
+<!--            <version>1.2.4</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.markdownj</groupId>-->
+<!--            <artifactId>markdownj-core</artifactId>-->
+<!--            <version>0.4</version>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>com.test</groupId>-->
+<!--            <artifactId>markdown2document</artifactId>-->
+<!--            <scope>system</scope>-->
+<!--            <systemPath>${basedir}/lib/markdown2document-1.0.0.jar</systemPath>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>org.rnorth.dropwizard</groupId>
+            <artifactId>dropwizard-markdown-assets-bundle</artifactId>
+            <version>1.0.4</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <configuration>
+                    <nonFilteredFileExtensions>cert</nonFilteredFileExtensions>
+                    <nonFilteredFileExtensions>jks</nonFilteredFileExtensions>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

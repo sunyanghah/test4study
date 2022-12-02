@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <script type="application/javascript" src="http://cdn.bootcss.com/stomp.js/2.3.3/stomp.min.js"></script>
+    <script>
+
+        var stompClient = Stomp.client('ws://localhost:2022/test-stomp');
+        // 向服务器发起websocket连接并发送CONNECT帧
+        stompClient.connect(
+            {},
+            function connectCallback (frame) {
+                // 连接成功时（服务器响应 CONNECTED 帧）的回调方法
+                console.log("连接成功");
+                console.log('已连接【' + frame + '】');
+
+                stompClient.subscribe('/user/11/topic/userPush',function (response) {
+                    // 服务端@MessageMapping后的返回值将发送到这里
+                    console.log(response.body);
+                });
+
+                stompClient.subscribe('/topic/test1103',function (response) {
+                    // 服务端@MessageMapping后的返回值将发送到这里
+                    console.log("------"+response.body);
+                    sendMsg();
+                });
+            },
+            function errorCallBack (error) {
+                // 连接失败时（服务器响应 ERROR 帧）的回调方法
+                console.log('连接失败【' + error + '】');
+            }
+        );
+
+        function sendMsg() {
+            // setInterval(function(){
+            //     console.log("chaoshi")
+            // },100000);
+            let strJson = JSON.stringify({'message': '客户端2返回的数据'});
+            let tx = stompClient.begin();
+            stompClient.send("/app/receive", {transaction: tx.id}, strJson);
+            tx.commit();
+        }
+    </script>
+</head>
+<body>
+<label>车辆信息推过来的数据</label>
+<div id="railcarInfo"></div>
+
+</body>
+</html>

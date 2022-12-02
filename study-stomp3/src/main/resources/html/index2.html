@@ -7,11 +7,14 @@
     <script type="application/javascript" src="https://cdn.bootcdn.net/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
     <script>
 
+        var stompClient = null;
 
-        var stompClient = Stomp.client('ws://localhost:8013/test0214');
-        wsConnect();
-
-        function wsConnect(){
+        function connect() {
+            if (stompClient != null && stompClient.connected){
+                console.log("当前已经处于链接状态")
+                return;
+            }
+            stompClient = Stomp.client('ws://localhost:8013/test0214');
 
             // 向服务器发起websocket连接并发送CONNECT帧
             stompClient.connect(
@@ -21,35 +24,40 @@
                     console.log("连接成功");
                     console.log('已连接【' + frame + '】');
 
-                    stompClient.subscribe('/user/1',function (response) {
-                        document.getElementById("railcarInfo").innerHTML = response.body;
-                        let timestamp=new Date().getTime();
-                        console.log("---------------------"+timestamp);
-                        console.log(response.body);
-                    });
-
                     stompClient.subscribe('/topic/app/marco',function (response) {
                         // 服务端@MessageMapping后的返回值将发送到这里
                         document.getElementById("railcarInfo").innerHTML = response.body;
                     });
 
+                    stompClient.subscribe('/topic/app/heartbeat',function (response) {
+                        // 服务端@MessageMapping后的返回值将发送到这里
+                        console.log("心跳成功---"+response.body);
+                    });
+
                     stompClient.subscribe('/user/lisi/topic/testSendToUser',function (response) {
-                        // lisi监听
+                        // zhangsan监听
                         document.getElementById("railcarInfo").innerHTML = response.body;
                     });
                 },
                 function errorCallBack (error) {
                     // 连接失败时（服务器响应 ERROR 帧）的回调方法
                     console.log('连接失败【' + error + '】');
+                    connect();
                 }
             );
         }
 
         function sendMsg() {
-            let strJson = JSON.stringify({'message': 'Marco!'});
-            stompClient.send("/app/marco", {transaction: 11}, strJson);
-        }
+            let clientId = document.getElementById("clientId").value;
+            let strJson = JSON.stringify({'message': clientId});
+            setInterval(function(){
+                let tx = stompClient.begin();
+                stompClient.send("/app/heartbeat", {transaction: tx.id}, strJson);
+                tx.commit();
+            },10000);
 
+        }
+    connect();
     </script>
 </head>
 <body>
@@ -58,6 +66,7 @@
 
 <br>
 <br>
+<input id="clientId" placeholder="终端名称">
 <input type="button" onclick="sendMsg()" value="点击发送">
 </body>
 </html>

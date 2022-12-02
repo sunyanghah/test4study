@@ -3,6 +3,13 @@ package test.socket.web;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import test.socket.socket.MyClient;
+import test.socket.socket.Test2;
+import test.socket.socket.TestHandle;
+
+import javax.annotation.Resource;
+import javax.websocket.Session;
+import java.util.List;
 
 /**
  * @author sunYang
@@ -12,9 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/")
 public class TestController {
 
-    @GetMapping
+
+    @Resource
+    private TestHandle testHandle;
+
+    @GetMapping("/test1")
     public void test1(){
-        System.out.println("======/");
+        List<Session> sessionList = testHandle.getSessionList();
+        System.out.println("-------------");
     }
 
     @GetMapping("/test")

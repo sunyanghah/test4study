@@ -1,0 +1,307 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Description:
+  zh-cn: 此模板为单实例自定义镜像模板示例，支持选择已有基础资源配置，支持配置ECS的付费模式为预付费或者后付费
+  en: This template supports single-instance with custom image, including scenarios using existing and creating ECS by prepaid or postpaid model
+Parameters:
+  SystemDiskCategory:
+    AssociationProperty: ALIYUN::ECS::Disk::SystemDiskCategory
+    AssociationPropertyMetadata:
+      InstanceType: InstanceType
+      ZoneId: ZoneId
+    Type: String
+    Description:
+      zh-cn: '<font color=''blue''><b>可选值：</b></font><br>[cloud_efficiency: <font color=''green''>高效云盘</font>]<br>[cloud_ssd: <font color=''green''>SSD云盘</font>]<br>[cloud_essd: <font color=''green''>ESSD云盘</font>]<br>[cloud: <font color=''green''>普通云盘</font>]'
+      en: '<font color=''blue''><b>Optional values:</b></font><br>[cloud_efficiency: <font color=''green''>Efficient Cloud Disk</font>]<br>[cloud_ssd: <font color=''green''>SSD Cloud Disk</font>]<br>[cloud_essd: <font color=''green''>ESSD Cloud Disk</font>]<br>[cloud: <font color=''green''>Cloud Disk</font>]'
+    Label:
+      zh-cn: 系统盘类型
+      en: System Disk Type
+  ECSPeriodUnit:
+    AssociationPropertyMetadata:
+      Visible:
+        Condition:
+          Fn::Not:
+            Fn::Equals:
+              - ${InstanceChargeType}
+              - PostPaid
+    Description:
+      zh-cn: 云服务器预付费资源的购买时长周期，取值：[Week（周）, Month（月）]，<br>
+      en: 'ECS Purchase cycle of prepaid resource, value: [Week, Month]<br>'
+    Default: Week
+    AllowedValues:
+      - Week
+      - Month
+    Label:
+      zh-cn: 云服务器预付费资源的购买周期
+      en: ECS Purchase cycle of prepaid resources
+    Type: String
+  ECSPeriod:
+    AssociationPropertyMetadata:
+      Visible:
+        Condition:
+          Fn::Not:
+            Fn::Equals:
+              - ${InstanceChargeType}
+              - PostPaid
+    Description:
+      zh-cn: 云服务器预付费资源的购买时长，当预付费资源的购买周期为Week时，取值范围：[1，2，3，4]; 当预付费资源的购买周期为Month时，取值：[1，2，3，4，5，6，7，8，9，12，24，36，48，60]<br>
+      en: 'When the purchase cycle of prepaid resource is week, the value range is: [1,2,3,4]; when the purchase cycle of prepaid resource is month, the value is: [1,2,3,4,5,6,7,8,9,12,24,36,48,60]<br>'
+    Default: 1
+    Label:
+      zh-cn: 云服务器预付费资源的购买时长
+      en: ECS Purchase duration of prepaid resources
+    AllowedValues:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 12
+      - 24
+      - 36
+      - 48
+      - 60
+    Type: Number
+  SecurityGroupId:
+    AssociationPropertyMetadata:
+      VpcId: VpcId
+    Description:
+      zh-cn: 现有安全组的实例ID
+      en: The instance ID of an existing security group.
+    Default: Null
+    Label:
+      zh-cn: 安全组ID
+      en: Security Group ID
+    AssociationProperty: ALIYUN::ECS::SecurityGroup::SecurityGroupId
+    Type: String
+  SystemDiskSize:
+    Default: 40
+    Type: Number
+    Description:
+      zh-cn: 系统盘大小, 取值范围：[40, 500], 单位：GB。
+      en: 'System disk size, range of values: 40-500, units: GB.'
+    Label:
+      zh-cn: 系统盘空间
+      en: System Disk Space
+  ZoneId:
+    AssociationProperty: ALIYUN::ECS::Instance::ZoneId
+    Type: String
+    Description:
+      zh-cn: 可用区配置决定了新建ECS实例的可用区。此外，如果您选择已有基础资源配置，仅能选到该可用区下的交换机。
+      en: ECS VSwitch Zone ID defines the Availability Zone for creating ECS instance. If you choose existing Infrastructure Configuration，you can only find the VSwitch under the availabilty zone.
+    Label:
+      zh-cn: ECS交换机可用区
+      en: ECS VSwitch Zone ID
+  DataDiskCategory:
+    AssociationProperty: ALIYUN::ECS::Disk::DataDiskCategory
+    AssociationPropertyMetadata:
+      InstanceType: InstanceType
+      ZoneId: ZoneId
+    Type: String
+    Description:
+      zh-cn: '<font color=''blue''><b>可选值：</b></font><br>[cloud_efficiency: <font color=''green''>高效云盘</font>]<br>[cloud_ssd: <font color=''green''>SSD云盘</font>]<br>[cloud_essd: <font color=''green''>ESSD云盘</font>]<br>[cloud: <font color=''green''>普通云盘</font>]'
+      en: '<font color=''blue''><b>Optional values:</b></font><br>[cloud_efficiency: <font color=''green''>Efficient Cloud Disk</font>]<br>[cloud_ssd: <font color=''green''>SSD Cloud Disk</font>]<br>[cloud_essd: <font color=''green''>ESSD Cloud Disk</font>]<br>[cloud: <font color=''green''>Cloud Disk</font>]'
+    Label:
+      zh-cn: 数据盘类型
+      en: Data Disk Type
+  InstanceChargeType:
+    Default: PostPaid
+    Label:
+      zh-cn: ECS实例的付费模式
+      en: ECS Instance Billing Method
+    Type: String
+    Description:
+      zh-cn: '<font color=''blue''><b>可选值：</b></font><br>[PostPaid: <font color=''green''>按量付费。</font>]<br>[PrePaid: <font color=''green''>预付费，包年包月。</font>]'
+      en: '<font color=''blue''><b>Optional values:</b></font><br>[PostPaid: <font color=''green''>Pay as you go.</font>]<br> [PrePaid: <font color=''green''>Prepaid, subscription.</font>]'
+    AllowedValues:
+      - PostPaid
+      - PrePaid
+  VpcId:
+    Default: Null
+    AssociationProperty: ALIYUN::ECS::VPC::VPCId
+    Type: String
+    Description:
+      zh-cn: 请选择已有的VPC<br><b><font color='blue'>如找不到VPC,请切换地域。</font></b>
+      en: Please select the existing VPC. <br><b><font color='blue'>If you can't find the VPC, please switch Regions.</font></b>
+    Label:
+      zh-cn: 现有VPC的实例ID
+      en: Existing VPC ID
+  DataDiskSize:
+    Description:
+      zh-cn: ECS实例数据盘大小，单位为GiB。取值范围：20~32768
+      en: 'ECS Instance disk size, range of values: 20-32768, units: GB'
+    Default: 100
+    MaxValue: 32768
+    MinValue: 20
+    Label:
+      zh-cn: 数据盘空间
+      en: Data Disk Space
+    Type: Number
+  VSwitchId:
+    AssociationPropertyMetadata:
+      VpcId: VpcId
+      ZoneId: ZoneId
+    Description:
+      zh-cn: 现有网络交换机的实例ID
+      en: The instance ID of an existing network switch.
+    Default: Null
+    Label:
+      zh-cn: 网络交换机ID
+      en: VSwitch ID
+    AssociationProperty: ALIYUN::ECS::VSwitch::VSwitchId
+    Type: String
+  Password:
+    ConstraintDescription:
+      zh-cn: 长度8-30，必须包含三项（大写字母、小写字母、数字、 ()`~!@#$%^&*_-+=|{}[]:;'<>,.?/ 中的特殊符号）。
+      en: Length 8-30, must contain three(Capital letters, lowercase letters, numbers, ()`~!@#$%^&*_-+=|{}[]:;'<>,.?/ Special symbol in).
+    Description:
+      zh-cn: 服务器登录密码,长度8-30，必须包含三项（大写字母、小写字母、数字、 ()`~!@#$%^&*_-+=|{}[]:;'<>,.?/ 中的特殊符号）。
+      en: Server login password, Length 8-30, must contain three(Capital letters, lowercase letters, numbers, ()`~!@#$%^&*_-+=|{}[]:;'<>,.?/ Special symbol in).
+    MinLength: 8
+    Label:
+      zh-cn: 实例密码
+      en: Instance Password
+    AllowedPattern: '[0-9A-Za-z\_\-\&:;''<>,=%`~!@#\(\)\$\^\*\+\|\{\}\[\]\.\?\/]+$'
+    NoEcho: true
+    MaxLength: 30
+    Type: String
+  InstanceType:
+    AssociationProperty: ALIYUN::ECS::Instance::InstanceType
+    AssociationPropertyMetadata:
+      InstanceChargeType: ${InstanceChargeType}
+      ZoneId: ZoneId
+    Type: String
+    Label:
+      zh-cn: 实例类型
+      en: Instance Type
+  InternetChargeType:
+    Type: String
+    Description:
+      zh-cn: '<font color=''blue''><b>可选值：</b></font><br>[PayByBandwidth: <font color=''green''>按带宽付费。</font>]<br>[PayByTraffic: <font color=''green''>按流量付费。</font>],<br>默认为PayByTraffic'
+      en: '<font color=''blue''><b>Optional values:</b></font><br>[PayByBandwidth: <font color=''green''>Pay by bandwidth. </font>]<br>[PayByTraffic: <font color=''green''>Pay by traffic. </font>],<br>The default is PayByTraffic'
+    Label:
+      en: InternetChargeType
+      zh-cn: 流量付费类型
+    AllowedValues:
+      - PayByBandwidth
+      - PayByTraffic
+    Default: PayByTraffic
+  InternetMaxBandwidthOut:
+    Type: Number
+    Description:
+      en: 'ECS Internet Max Bandwidth Out. Value range: 0~100. Unit: Mbps. Default value: 0.'
+      zh-cn: ECS最大出带宽。取值范围：0~100。单位：Mbps。默认值：0。
+    Label:
+      en: 'Internet Max BandwidthOut '
+      zh-cn: 实例公网带宽
+    Default: 0
+    MaxValue: 100
+    MinValue: 0
+  UinoHome:
+    Type: String
+    Description:
+      zh-cn: 'UINO_HOME环境变量的值,此值为后期的目录，以后安装的所有ThingJS-X相关的程序都会安装到此目录下'
+      en: 'this is english description of uinoHome'
+    Default: '/uino'
+Outputs:
+  InstanceIds:
+    Value:
+      Fn::GetAtt:
+        - ECSInstances
+        - InstanceIds
+Conditions: {}
+Resources:
+  ECSInstances:
+    Type: ALIYUN::ECS::InstanceGroup
+    Properties:
+      SystemDiskCategory:
+        Ref: SystemDiskCategory
+      VpcId:
+        Ref: VpcId
+      InstanceChargeType:
+        Ref: InstanceChargeType
+      AllocatePublicIP: true
+      SecurityGroupId:
+        Ref: SecurityGroupId
+      InternetChargeType:
+        Ref: InternetChargeType
+      InternetMaxBandwidthOut:
+        Ref: InternetMaxBandwidthOut
+      DiskMappings:
+        - Category:
+            Ref: DataDiskCategory
+          Size:
+            Ref: DataDiskSize
+      SystemDiskSize:
+        Ref: SystemDiskSize
+      UserData:
+        Fn::Sub:
+          - |
+            #!/bin/sh
+            sleep 30
+            mkdir /testUserData
+            cd /testUserData
+            wget http://82.156.172.114/thingjsx/ThingJS-X_Installer_3.5.9.tar.gz
+            tar -zxvf ThingJS-X_Installer_3.5.9.tar.gz
+            cd ThingJS-X_Installer_3.5.9/bin
+            sh jsc-install-jre.sh ${UinoHome}
+            sh jsc-install-es.sh
+            sh jsc-install-ThingJS-X.sh
+          - CurlCli:
+            UinoHome:
+              Ref: UinoHome
+      ImageId: centos_7
+      PeriodUnit:
+        Ref: ECSPeriodUnit
+      VSwitchId:
+        Ref: VSwitchId
+      Period:
+        Ref: ECSPeriod
+      Password:
+        Ref: Password
+      InstanceType:
+        Ref: InstanceType
+      ZoneId:
+        Ref: ZoneId
+      MaxAmount: 1
+    Metadata:
+      ALIYUN::ROS::Designer:
+        id: 3d97f557-f6c2-475f-bdca-942c45e583b5
+Metadata:
+  ALIYUN::ROS::Interface:
+    ParameterGroups:
+      - Parameters:
+          - ZoneId
+        Label:
+          default:
+            zh-cn: 可用区配置
+            en: Zone Configuration
+      - Parameters:
+          - VpcId
+          - VSwitchId
+          - SecurityGroupId
+        Label:
+          default:
+            zh-cn: 选择已有基础资源配置
+            en: Choose existing Infrastructure Configuration
+      - Parameters:
+          - InstanceChargeType
+          - ECSPeriodUnit
+          - ECSPeriod
+          - InstanceType
+          - SystemDiskCategory
+          - SystemDiskSize
+          - DataDiskCategory
+          - DataDiskSize
+          - InternetChargeType
+          - InternetMaxBandwidthOut
+          - Password
+        Label:
+          default:
+            zh-cn: ECS 配置（必填）
+            en: ECS Configuration
+    TemplateTags:
+      - acs:example:ISV软件部署:自定义镜像创建单实例ECS云服务器

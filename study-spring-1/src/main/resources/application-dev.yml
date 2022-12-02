@@ -3,6 +3,11 @@ server:
   servlet:
     context-path: /study-spring
 
+threadpool:
+  core-pool-size: 9
+  max-pool-size: 9
+  queue-capacity: 5
+  keep-alive-seconds: 30
 #spring:
 #  datasource:
 #    driver-class-name: com.mysql.jdbc.Driver

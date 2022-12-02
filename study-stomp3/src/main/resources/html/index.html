@@ -43,7 +43,7 @@
             let strJson = JSON.stringify({'message': clientId});
             setInterval(function(){
                 let tx = stompClient.begin();
-                stompClient.send("/app/heartbeat", {transaction: tx.id}, strJson);
+                stompClient.send("/app/heartbeat", null, strJson);
                 tx.commit();
                 },10000);
 

@@ -1,2 +1,6 @@
 server:
   port: 1997
+
+spring:
+  profiles:
+    active: @profiles.active@

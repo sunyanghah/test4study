@@ -2,6 +2,7 @@ package test.socket.socket;
 
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
@@ -15,6 +16,9 @@ import java.io.IOException;
 @Component
 public class Test2 {
 
+    @Resource
+    private TestHandle testHandle;
+
     private Session session;
 
     private String ip; // 客户端ip
@@ -23,11 +27,11 @@ public class Test2 {
      * 连接建立成功调用的方法
      */
     @OnOpen
-    public void onOpen(Session session, @PathParam("ip") String ip) {
+    public void onOpen(Session session, @PathParam("ip") String ip) throws IOException, InterruptedException {
+        testHandle.getSessionList().add(session);
         this.session = session;
         this.ip = ip;
 		System.out.println("有新连接加入！");
-
     }
 
     /**
@@ -49,11 +53,13 @@ public class Test2 {
 
     }
 
-    @OnMessage
+//    @OnMessage
     public void test2(String message){
         System.out.println(message);
         try {
-            session.getBasicRemote().sendText("sdfasdfasffffffff");
+            for (Session openSession : session.getOpenSessions()) {
+                openSession.getBasicRemote().sendText("sdfasdfasffffffff");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

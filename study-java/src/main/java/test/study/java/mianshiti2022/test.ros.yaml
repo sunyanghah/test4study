@@ -1,0 +1,147 @@
+{
+  "ROSTemplateFormatVersion" : "2015-09-01",
+
+  "Description" : "模板描述信息，可用于说明模板的适用场景、架构说明等。",
+  "Parameters" : {
+    "uinoHome": {
+      "Type": "String",
+      "Description": {
+        "zh-cn": "UINO_HOME环境变量的值,此值为后期的目录，以后安装的所有ThingJS-X相关的程序都会安装到此目录下",
+        "en": "this is english description of uinoHome"
+      },
+      "Default": "/uino"
+    },
+    "esInstallType": {
+      "Type": "String",
+      "Description": {
+        "zh-cn": "1：一键安装，2：自定义安装。一键安装时用户名密码为",
+        "en": "this is english description of esInstallType"
+      },
+      "Default": "1",
+      "AllowedValues": [
+        "1",
+        "2"
+      ]
+    },
+    "esIP": {
+      "Type": "String",
+      "Description": {
+        "zh-cn": "elasticsearch结点IP（若是云主机请填写主机实际IP地址，即ifconfig可查看到的IP）",
+        "en": "this is english description of esIP"
+      },
+      "Default": null
+    },
+    "esType": {
+      "Type": "String",
+      "Description": {
+        "zh-cn": "只有esInstallType为自定义安装时需填写，es类型 1：单机 2：集群",
+        "en": ""
+      },
+      "Default": "1",
+      "AllowedValues": [
+        "1",
+        "2"
+      ]
+    },
+    "esUsername": {
+      "Type": "String",
+      "Description": {
+        "zh-cn": "es用户名，只有esInstallType为自定义安装时需填写",
+        "en": ""
+      },
+      "Default": null
+    },
+    "esPassword": {
+      "Type": "String",
+      "Description": {
+        "zh-cn": "es密码，只有esInstallType为自定义安装时需填写",
+        "en": ""
+      },
+      "Default": null
+    },
+    "thingjsxIp": {
+      "Type": "String",
+      "Description": {
+        "zh-cn": "输入当前节点的IP地址（若是云主机请填写主机实际IP地址，即ifconfig可查看到的IP）",
+        "en": ""
+      },
+      "Default": null
+    },
+    "thingjsxServerType": {
+      "Type": "String",
+      "Description": {
+        "zh-cn": "输入安装类型：1：表示单节点安装，2：表示集群安装",
+        "en": ""
+      },
+      "Default": "1",
+      "AllowedValues": [
+        "1",
+        "2"
+      ]
+    },
+    "thingjsxEsIp": {
+      "Type": "String",
+      "Description": {
+        "zh-cn": "输入ES的IP地址（填写安装ES时绑定的IP地址）",
+        "en": ""
+      },
+      "Default": null
+    },
+    "thingjsxEsUsername": {
+      "Type": "String",
+      "Description": {
+        "zh-cn": "输入ES的用户名",
+        "en": ""
+      },
+      "Default": null
+    },
+    "thingjsxEsPassword": {
+      "Type": "String",
+      "Description": {
+        "zh-cn": "输入ES的密码",
+        "en": ""
+      },
+      "Default": null
+    }
+  },
+  "Resources" : {
+    "InstanceGroup": {
+      "Type": "ALIYUN::ECS::InstanceGroup",
+      "Properties": {
+        "uinoHome": {
+          "Ref": "uinoHome"
+        },
+        "esInstallType": {
+          "Ref": "esInstallType"
+        },
+        "esIP": {
+          "Ref": "esIP"
+        },
+        "esType": {
+          "Ref": "esType"
+        },
+        "esUsername": {
+          "Ref": "esUsername"
+        },
+        "esPassword": {
+          "Ref": "esPassword"
+        },
+        "thingjsxIp": {
+          "Ref": "thingjsxIp"
+        },
+        "thingjsxServerType": {
+          "Ref": "thingjsxServerType"
+        },
+        "thingjsxEsIp": {
+          "Ref": "thingjsxEsIp"
+        },
+        "thingjsxEsUsername": {
+          "Ref": "thingjsxEsUsername"
+        },
+        "thingjsxEsPassword": {
+          "Ref": "thingjsxEsPassword"
+        }
+      }
+    }
+  }
+}

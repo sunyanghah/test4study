@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>test4study</artifactId>
+        <groupId>test.study</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>study-tongweb</artifactId>
+
+    <dependencies>
+        <!--引入tongweb包-->
+        <dependency>
+            <groupId>com.tongweb.springboot</groupId>
+            <artifactId>tongweb-spring-boot-starter</artifactId>
+            <version>2.x.0.RELEASE</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/../lib/tongweb-spring-boot-starter-2.x.0.RELEASE.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.tongweb</groupId>
+            <artifactId>tongweb-embed</artifactId>
+            <version>7.0.E.2</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/../lib/tongweb-embed-7.0.E.2.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <includeSystemScope>true</includeSystemScope>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

@@ -43,6 +43,15 @@
         <module>study-datasources2</module>
         <module>study-datasources3</module>
         <module>study-stomp3</module>
+        <module>study-fastdfs</module>
+        <module>study-retrofit</module>
+        <module>study-pureftpd</module>
+        <module>study-itext</module>
+        <module>study-itext2</module>
+        <module>study-markdown2html</module>
+        <module>study-socket2</module>
+        <module>study-tonglink</module>
+        <module>study-tongweb</module>
     </modules>
 
     <properties>
