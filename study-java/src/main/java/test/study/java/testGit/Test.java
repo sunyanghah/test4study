@@ -10,7 +10,7 @@ public class Test {
         TestB tb = new TestB();
         tb.aa();
         tb.bb();
-        System.out.println("1");
+        System.out.println("2vbvb");
     }
 
 }
