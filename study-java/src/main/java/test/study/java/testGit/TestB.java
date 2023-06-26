@@ -9,11 +9,11 @@ public class TestB {
     TestA ta = new TestA();
 
     public void aa(){
-        System.out.println(ta.a());
+        System.out.println(ta.x());
     }
 
     public void bb(){
-        System.out.println(ta.b());
+        System.out.println(ta.y());
     }
 
 }

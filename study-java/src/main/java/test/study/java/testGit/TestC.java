@@ -9,7 +9,7 @@ public class TestC {
     TestA ta = new TestA();
 
     public void cc(){
-        System.out.println(ta.c());
+        System.out.println(ta.z());
     }
 
 }

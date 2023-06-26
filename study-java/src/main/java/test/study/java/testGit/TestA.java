@@ -6,15 +6,15 @@ package test.study.java.testGit;
  */
 public class TestA {
 
-    public int a(){
+    public int x(){
         return 1;
     }
 
-    public int b(){
+    public int y(){
         return 2;
     }
 
-    public int c(){
+    public int z(){
         return 3;
     }
 
