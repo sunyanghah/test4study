@@ -9,6 +9,7 @@ public class Test {
     public static void main(String[] args) {
         TestB tb = new TestB();
         tb.aa();
+        tb.bb();
         System.out.println("1");
     }
 
