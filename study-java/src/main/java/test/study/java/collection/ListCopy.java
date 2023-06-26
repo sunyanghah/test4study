@@ -23,11 +23,13 @@ public class ListCopy {
         map3.put("name","王五");
         list1.add(map3);
         list1.forEach(System.out::println);
+        System.out.println("-----------------------");
         List<Map> list2 = new ArrayList<>(list1);
         Map map = list2.get(1);
         map.put("age",1111);
 
         list1.forEach(System.out::println);
+        System.out.println("===");
         list2.forEach(System.out::println);
 
 

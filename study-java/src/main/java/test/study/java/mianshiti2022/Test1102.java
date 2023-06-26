@@ -9,17 +9,17 @@ import org.springframework.util.StringUtils;
 public class Test1102 {
 
     public static void main(String[] args) {
-        System.out.println(StringUtils.hasLength(" "));
-        System.out.println(StringUtils.hasText(" "));
-        System.out.println(org.apache.commons.lang3.StringUtils.isBlank(" "));
-        System.out.println(org.apache.commons.lang3.StringUtils.isEmpty(" "));
+        System.out.println(StringUtils.hasLength(" ")); // true
+        System.out.println(StringUtils.hasText(" ")); // false
+        System.out.println(org.apache.commons.lang3.StringUtils.isBlank(" ")); // true
+        System.out.println(org.apache.commons.lang3.StringUtils.isEmpty(" ")); // false
 
         System.out.println("----");
 
-        System.out.println(StringUtils.hasLength(""));
-        System.out.println(StringUtils.hasText(""));
-        System.out.println(org.apache.commons.lang3.StringUtils.isBlank(""));
-        System.out.println(org.apache.commons.lang3.StringUtils.isEmpty(""));
+        System.out.println(StringUtils.hasLength("")); // false
+        System.out.println(StringUtils.hasText("")); // false
+        System.out.println(org.apache.commons.lang3.StringUtils.isBlank("")); // true
+        System.out.println(org.apache.commons.lang3.StringUtils.isEmpty("")); // true
 
         System.out.println("----");
 

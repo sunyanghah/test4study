@@ -21,15 +21,15 @@ public class StudySpring2Application {
      */
     public static void main(String[] args){
         ConfigurableApplicationContext run = SpringApplication.run(StudySpring2Application.class, args);
-        AnnotationConfigApplicationContext acac = new AnnotationConfigApplicationContext(StudySpring2Application.class);
-        TestProxyService bean = acac.getBean(TestProxyService.class);
-        bean.myPrint();
-        String[] beanDefinitionNames = acac.getBeanDefinitionNames();
-        for (String beanDefinitionName : beanDefinitionNames) {
-            if (beanDefinitionName.startsWith("my") || beanDefinitionName.startsWith("test.")) {
-                System.out.println(beanDefinitionName);
-            }
-        }
+//        AnnotationConfigApplicationContext acac = new AnnotationConfigApplicationContext(StudySpring2Application.class);
+//        TestProxyService bean = acac.getBean(TestProxyService.class);
+//        bean.myPrint();
+//        String[] beanDefinitionNames = acac.getBeanDefinitionNames();
+//        for (String beanDefinitionName : beanDefinitionNames) {
+//            if (beanDefinitionName.startsWith("my") || beanDefinitionName.startsWith("test.")) {
+//                System.out.println(beanDefinitionName);
+//            }
+//        }
     }
 
 }

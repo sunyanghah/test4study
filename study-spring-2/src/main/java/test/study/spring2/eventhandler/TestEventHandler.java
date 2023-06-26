@@ -17,6 +17,7 @@ public class TestEventHandler implements ApplicationListener<TestEvent> {
     public void onApplicationEvent(TestEvent testEvent) {
        log.info("111111111111111");
         try {
+            System.out.println(testEvent.getSomething());
             Thread.sleep(4000);
         } catch (InterruptedException e) {
             e.printStackTrace();

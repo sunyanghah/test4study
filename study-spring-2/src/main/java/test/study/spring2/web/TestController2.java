@@ -1,13 +1,16 @@
 package test.study.spring2.web;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import test.study.spring2.config.TestProperty;
 import test.study.spring2.event.TestEvent;
 import test.study.spring2.proxy.DAO;
 
 import javax.annotation.Resource;
+import java.lang.reflect.Proxy;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,12 +19,15 @@ import java.util.Map;
  * @author dell
  */
 @Controller
+@Slf4j
 public class TestController2 {
 
     @Resource
     private DAO dao;
     @Resource
     private ApplicationEventPublisher applicationEventPublisher;
+    @Resource
+    private TestProperty testProperty;
 
     @GetMapping("/myTest2")
     public void myTest2(){
@@ -30,7 +36,10 @@ public class TestController2 {
 
     @GetMapping("/myTest4")
     public void myTest4() {
+        log.info("aaaaaaaaaa");
         applicationEventPublisher.publishEvent(new TestEvent(this));
+        applicationEventPublisher.publishEvent(new TestEvent(this, "this is data to transfer"));
+        log.info("bbbbbbbbbb");
     }
 
     @GetMapping("/myTest3")
@@ -39,6 +48,7 @@ public class TestController2 {
         Map map = new HashMap();
         map.put("a","A");
         map.put("b","B");
+        log.info("----"+Proxy.isProxyClass(dao.getClass()));
         dao.tttt("zhangsan",12,map);
     }
 

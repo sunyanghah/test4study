@@ -1,5 +1,6 @@
 package test.study.java.mianshiti2021;
 
+import com.alibaba.fastjson.JSON;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -40,6 +41,9 @@ public class Test1110 {
 
         List<Top> topList = new ArrayList<>();
         topList.add(t1);
+
+        System.out.println(JSON.toJSONString(topList));
+        System.out.println("---------------");
 
         List<String> idList = topList.stream().flatMap(top -> top.getMiddleList().stream()
                 .flatMap(middle -> middle.getBottomList().stream()

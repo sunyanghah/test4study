@@ -23,9 +23,8 @@ public class Test20201027 {
 
 
         // jackson
-
-        HikResultCO hikResult2 = objectMapper.readValue(result, new com.fasterxml.jackson.core.type.TypeReference<HikResultCO<HikTaskProgressCO2>>() {
-        });
+//        HikResultCO hikResult2 = objectMapper.readValue(result, new com.fasterxml.jackson.core.type.TypeReference<HikResultCO<HikTaskProgressCO2>>() {
+//        });
 
         System.out.println(hikResult);
     }

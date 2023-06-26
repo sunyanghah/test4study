@@ -25,6 +25,7 @@ public class TestController {
     @Resource(name = "bean3")
     private BeanTest beanTest3;
 
+    public static final String a = null;
 
     @GetMapping("/test")
     public void test() {

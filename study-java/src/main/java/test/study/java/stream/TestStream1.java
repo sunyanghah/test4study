@@ -5,6 +5,8 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -46,22 +48,23 @@ public class TestStream1 {
          * Intermediate：map (mapToInt, flatMap 等)、 filter、 distinct、 sorted、 peek、 skip、 parallel、 sequential、 unordered
          * Terminal：forEach、 forEachOrdered、 toArray、 reduce、 collect、 min、 max、 count、iterator
          */
+        System.out.println("-----------------------filter-------------------------------");
         list.stream().filter(student -> !"C".equals(student.name))
             .forEach(student -> System.out.println(JSON.toJSONString(student)));
 
-        System.out.println("------------------------------------------------------");
+        System.out.println("---------------------------count---------------------------");
 
         long count = list.stream().filter(student -> "G".equals(student.sex)).count();
         System.out.println(count);
 
-        System.out.println("------------------------------------------------------");
+        System.out.println("---------------------of---------------------------------");
 
         /**
          * of方法，其生成的Stream是有限长度的，Stream的长度为其内的元素个数
          */
         Stream.of(1,2,3,4,5).filter(num -> num > 2).forEach(System.out::println);
 
-        System.out.println("------------------------------------------------------");
+        System.out.println("-----------------------generate-------------------------------");
         /**
          * generator方法，返回一个无限长度的Stream,其元素由Supplier接口的提供。
          * 在Supplier是一个函数接口，只封装了一个get()方法，其用来返回任何泛型的值，
@@ -75,6 +78,14 @@ public class TestStream1 {
          */
         Stream<Double> generateC = Stream.generate(java.lang.Math::random).limit(4);
         generateC.forEach(System.out::println);
+
+        System.out.println("-------------------------map-----------------------------");
+        List<Integer> noList = list.stream().map(stu -> stu.getNo()).collect(Collectors.toList());
+
+        System.out.println("------------------------collect map------------------------------");
+        Map<Integer, Student> studentMap = list.stream().collect(Collectors.toMap(Student::getNo, s -> s));
+
+
 
     }
 

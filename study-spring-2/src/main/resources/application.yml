@@ -2,3 +2,17 @@ server:
   port: 8001
 
 spring.aop.proxy-target-class: false
+
+test:
+  name: lisi
+  name-list:
+    - a
+    - b
+    - c
+  tt-list:
+    - test1:
+        name: zhangsan
+        age: 18
+    - test2:
+        name: wangwu
+        age: 20

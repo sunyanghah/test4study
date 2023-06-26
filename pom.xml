@@ -52,6 +52,9 @@
         <module>study-socket2</module>
         <module>study-tonglink</module>
         <module>study-tongweb</module>
+        <module>study-slowsql</module>
+        <module>study-slowsql2</module>
+        <module>study-statemachine</module>
     </modules>
 
     <properties>

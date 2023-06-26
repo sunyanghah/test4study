@@ -96,11 +96,13 @@ public class Test0518 {
 //                11,21,12,12,23,15,24,27,29,29,12,11,10,9,6,4,5,7,3,2,8,0,12,0,21,23,25,25,26,22,11,12,14,15,21,22,23,1,3,4,2,21,19,18,17,14,10,21,21,23,22,
 //                11,21,12,12,23,15,24,27,29,29,12,11,10,9,6,4,5,7,3,2,8,0,12,0,21,23,25,25,26,22,11,12,14,15,21,22,23,1,3,4,2,21,19,18,17,14,10,21,21,23,22,
 //                11,21,12,12,23,15,24,27,29,29,12,11,10,9,6,4,5,7,3,2,8,0,12,0,21,23,25,25,26};
-        int[] arr = {4,3,2,5,1};
-        kuaisu2(arr,0,arr.length-1);
-        for (int i : arr) {
-            System.out.print(i);
-        }
+//        int[] arr = {4,3,2,5,1};
+//        kuaisu2(arr,0,arr.length-1);
+//        for (int i : arr) {
+//            System.out.print(i);
+//        }
+
+        xier();
     }
 
     public static void findSecond(int[] arr){
@@ -237,6 +239,38 @@ public class Test0518 {
         //然后在对左右两边的列表在进行快速排序
         kuaisu(arr, start, low -1);
         kuaisu(arr, low + 1, end);
+    }
+
+    public static void xier(){
+        int[] array={49,38,65,97,76,13,27,49,78,34,12,64,1};
+        System.out.println("排序之前：");
+        for(int i=0;i<array.length;i++){
+            System.out.print(array[i]+" ");
+        }
+        //希尔排序
+        int gap = array.length;
+        while (true) {
+            gap /= 2;   //增量每次减半
+            for (int i = 0; i < gap; i++) {
+                for (int j = i + gap; j < array.length; j += gap) {//这个循环里其实就是一个插入排序
+                    int k = j - gap;
+                    while (k >= 0 && array[k] > array[k+gap]) {
+                        int temp = array[k];
+                        array[k] = array[k+gap];
+                        array[k + gap] = temp;
+                        k -= gap;
+                    }
+                }
+            }
+            if (gap == 1)
+                break;
+        }
+
+        System.out.println();
+        System.out.println("排序之后：");
+        for(int i=0;i<array.length;i++){
+            System.out.print(array[i]+" ");
+        }
     }
 
     public static void kuaisu2(int[] arr,int low,int high){ // {4,3,2,5,1}

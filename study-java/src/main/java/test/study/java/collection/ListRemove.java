@@ -11,7 +11,7 @@ import java.util.List;
 public class ListRemove {
 
     public static void main(String[] args) throws Exception {
-        test3();
+        test2();
     }
 
     public static void test1() throws Exception{
@@ -20,6 +20,7 @@ public class ListRemove {
             if ("c".equals(list.get(i))) {
                 // UnsupportedOperationException
                 // arrays.aslist 得到的对象并不是常规的arrayList，而是java util Arrays类的一个内部类
+                // 该remove方法是java.util.AbstractList抽象类中提供的，直接抛出异常。
                 list.remove(i);
             }
         }
