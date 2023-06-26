@@ -14,4 +14,8 @@ public class TestA {
         return 2;
     }
 
+    public int c(){
+        return 3;
+    }
+
 }
