@@ -1,5 +1,6 @@
 package test.study.java.mianshi2020;
 
+import lombok.extern.slf4j.Slf4j;
 import org.openjdk.jol.info.ClassLayout;
 
 import java.util.Vector;
@@ -10,10 +11,11 @@ import java.util.concurrent.locks.LockSupport;
  * @author dell
  * Test biased
  */
+@Slf4j
 public class Test0601 {
 
     public static void main(String[] args) throws Exception {
-        test10();
+        test7_1();
     }
 
     /**
@@ -99,11 +101,16 @@ public class Test0601 {
         new Thread("t1"){
             @Override
             public void run() {
-                System.out.println(ClassLayout.parseInstance(dog).toPrintable()); // 05 00 00 00 (00000101 00000000 00000000 00000000) (5)
-                synchronized (dog){
-                    System.out.println(ClassLayout.parseInstance(dog).toPrintable()); // 05 50 54 19 (00000101 01010000 01010100 00011001) (424955909)
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-                System.out.println(ClassLayout.parseInstance(dog).toPrintable()); // 05 50 54 19 (00000101 01010000 01010100 00011001) (424955909)
+                log.info(ClassLayout.parseInstance(dog).toPrintable()); // 05 00 00 00 (00000101 00000000 00000000 00000000) (5)
+                synchronized (dog){
+                    log.info(ClassLayout.parseInstance(dog).toPrintable()); // 05 50 54 19 (00000101 01010000 01010100 00011001) (424955909)
+                }
+                log.info(ClassLayout.parseInstance(dog).toPrintable()); // 05 50 54 19 (00000101 01010000 01010100 00011001) (424955909)
                 synchronized (Test0601.class){
                     Test0601.class.notify();
                 }
@@ -120,12 +127,12 @@ public class Test0601 {
                         e.printStackTrace();
                     }
                 }
-                System.out.println(ClassLayout.parseInstance(dog).toPrintable()); // 05 50 54 19 (00000101 01010000 01010100 00011001) (424955909)
+                log.info(ClassLayout.parseInstance(dog).toPrintable()); // 05 50 54 19 (00000101 01010000 01010100 00011001) (424955909)
                 // 升级为轻量级锁
                 synchronized (dog){
-                    System.out.println(ClassLayout.parseInstance(dog).toPrintable()); // 90 f0 41 1a (10010000 11110000 01000001 00011010) (440529040)
+                    log.info(ClassLayout.parseInstance(dog).toPrintable()); // 90 f0 41 1a (10010000 11110000 01000001 00011010) (440529040)
                 }
-                System.out.println(ClassLayout.parseInstance(dog).toPrintable()); // 01 00 00 00 (00000001 00000000 00000000 00000000) (1)
+                log.info(ClassLayout.parseInstance(dog).toPrintable()); // 01 00 00 00 (00000001 00000000 00000000 00000000) (1)
             }
         }.start();
     }
@@ -194,6 +201,42 @@ public class Test0601 {
         }
         // 不可偏向 normal
         System.out.println(ClassLayout.parseInstance(dog).toPrintable()); // 01 00 00 00 (00000001 00000000 00000000 00000000) (1)
+
+    }
+
+    /**
+     * 调用过wait 或 notify方法后 不可偏向
+     */
+    public static void test7_1() throws InterruptedException {
+        Dog dog = new Dog();
+        // normal 可偏向
+        System.out.println("111"+ClassLayout.parseInstance(dog).toPrintable()); // 101
+
+        Thread t1 = new Thread( ()-> {
+            synchronized (dog){
+                try {
+                    System.out.println("222"+ClassLayout.parseInstance(dog).toPrintable()); // 101
+                    dog.wait(2);
+                    // 调用wait升级成重量级锁
+                    System.out.println("333"+ClassLayout.parseInstance(dog).toPrintable()); // 10
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        t1.start();
+        t1.join();
+
+        Thread.sleep(3000); // 过一段时间让无锁竞争，不然下面3个都会打重量级锁
+
+        //sleep一段时间后，无锁竞争，dog降级成无锁 不可偏向
+        System.out.println("444"+ClassLayout.parseInstance(dog).toPrintable()); // 001
+        synchronized (dog){
+            // 因为现在dog不可偏向，升级成轻量级锁
+            System.out.println("555"+ClassLayout.parseInstance(dog).toPrintable()); // 00
+        }
+        // 不可偏向
+        System.out.println("666"+ClassLayout.parseInstance(dog).toPrintable()); // 001
 
     }
 
@@ -294,7 +337,7 @@ public class Test0601 {
      */
     public static void test9() throws InterruptedException {
         Vector<Object> dogs = new Vector<>();
-        int num = 39;
+        int num = 41;
         t1 = new Thread("t1"){
             @Override
             public void run() {
@@ -358,6 +401,7 @@ public class Test0601 {
             @Override
             public void run() {
                 LockSupport.park();
+                System.out.println("==================================");
                 // t3已经触发批量撤销，Dog类的新创建对象也是不可偏向状态
                 System.out.println("last new------"+ClassLayout.parseInstance(new Dog()).toPrintable());
             }

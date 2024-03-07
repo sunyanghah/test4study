@@ -4,9 +4,9 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://10.100.30.105:1541/test_sy_0607?useSSL=false&&characterEncoding=utf-8&&serverTimezone=Hongkong&&allowPublicKeyRetrieval=true
-    username: uinnova
-    password: Uinnova@123
+    url: jdbc:mysql://10.21.20.209:13306/testsy?useSSL=false&&characterEncoding=utf-8&&serverTimezone=Hongkong&&allowPublicKeyRetrieval=true
+    username: aismeta
+    password: 8uhb*UHB
     hikari:
       # 一个连接的生命时长（毫秒），超时而且没被使用则被释放（retired），缺省:30分钟，建议设置比数据库超时时长少30秒以上
       maxLifetime: 1765000
@@ -38,5 +38,8 @@ mybatis-plus:
   configuration:
     map-underscore-to-camel-case: false
     cache-enabled: true
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
 
+logging:
+  level:
+    com.baomidou.mybatisplus: info

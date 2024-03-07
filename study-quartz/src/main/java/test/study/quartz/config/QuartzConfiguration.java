@@ -1,4 +1,4 @@
-package test.study.quartz;
+package test.study.quartz.config;
 
 import org.quartz.Scheduler;
 import org.quartz.ee.servlet.QuartzInitializerListener;

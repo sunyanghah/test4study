@@ -1,4 +1,4 @@
-package test.study.quartz;
+package test.study.quartz.web;
 
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;

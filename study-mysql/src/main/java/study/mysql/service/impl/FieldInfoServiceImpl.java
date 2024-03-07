@@ -32,7 +32,7 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
 
         List<FieldInfo> fieldInfoList = new ArrayList<>();
 
-        for (int i = 0; i < 1000000; i++) {
+        for (int i = 0; i < 3; i++) {
             FieldInfo fieldInfo = new FieldInfo();
             fieldInfo.setId(idGenerator.next());
             fieldInfo.setCategoryId(idGenerator.next());
@@ -40,7 +40,7 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
             fieldInfo.setName("thisIsName"+i);
             fieldInfo.setDescription("thisIsDescription"+i);
             fieldInfoList.add(fieldInfo);
-            if (fieldInfoList.size() == 1000){
+            if (fieldInfoList.size() == 3){
                 this.saveBatch(fieldInfoList);
                 fieldInfoList.clear();
             }

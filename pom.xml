@@ -48,13 +48,15 @@
         <module>study-pureftpd</module>
         <module>study-itext</module>
         <module>study-itext2</module>
-        <module>study-markdown2html</module>
         <module>study-socket2</module>
         <module>study-tonglink</module>
         <module>study-tongweb</module>
         <module>study-slowsql</module>
         <module>study-slowsql2</module>
         <module>study-statemachine</module>
+        <module>study-chatgpt</module>
+        <module>study-security-jwt</module>
+        <module>study-ldap</module>
     </modules>
 
     <properties>
