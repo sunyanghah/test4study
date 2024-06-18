@@ -5,6 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import test.study.spring1.factorybean.TestFactoryBeanService;
 import test.study.spring1.service.TestProxy;
 
@@ -13,6 +15,7 @@ import test.study.spring1.service.TestProxy;
  * @author dell
  */
 @SpringBootApplication
+@EnableScheduling
 public class StudySpring1Application {
 
     public static void main(String[] args){

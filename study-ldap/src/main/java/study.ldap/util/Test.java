@@ -22,9 +22,11 @@ public class Test {
 
     public static void main(String[] args) {
         ImcSyncConfigVo imcSyncConfigVo = new ImcSyncConfigVo();
-        imcSyncConfigVo.setAdminDn("CN=sic,OU=asiainfo-sec,OU=asiainfo-Users,DC=ais,DC=com");
+//        imcSyncConfigVo.setAdminDn("CN=sic,OU=asiainfo-sec,OU=asiainfo-Users,DC=ais,DC=com");
+        imcSyncConfigVo.setAdminDn("CN=sic,OU=special,OU=asiainfo-Users,DC=ais,DC=com");
         imcSyncConfigVo.setPort("389");
-        imcSyncConfigVo.setAdminPwd("Asiainfo@QWE$%^");
+//        imcSyncConfigVo.setAdminPwd("Asiainfo@QWE$%^");
+        imcSyncConfigVo.setAdminPwd("Asiainfo#!@#)(*");
         imcSyncConfigVo.setUrl("10.21.121.188");
         imcSyncConfigVo.setSourceType(ImcSyncEnum.SyncSourceType.LDAP);
         imcSyncConfigVo.setIsSslConnect(ImcSyncEnum.IsSslConnect.NO);
@@ -33,13 +35,14 @@ public class Test {
         String baseDn = "OU=asiainfo-sec,OU=asiainfo-Users,DC=ais,DC=com";
 //        testAuth();
 //        queryOrgColumns(context,baseDn);
-        queryUserColumns(context,baseDn);
+//        queryUserColumns(context,baseDn);
 
 //        queryOrgDataSelf(context,baseDn);
-//        queryOrgDataByParent(context,baseDn,"业务与数据安全平台");
+        queryOrgDataByParent(context,baseDn,"asiainfo-sec");
 
 //          queryUserSelf(context,baseDn,"hecj");
 //        queryUserDataByOrg(context,baseDn);
+//        queryUserDataByOrgOfPage(context,baseDn);
 //        testSetData();
     }
 
@@ -128,6 +131,12 @@ public class Test {
             while(allAttr.hasMore()){
                 Attribute attribute = allAttr.next();
                 attrList.add(attribute.getID());
+
+//                if ("objectGUID".equals(attribute.getID())) {
+//                    String guid = getObjectGUID((byte[]) attribute.getAll().next());
+//                    System.out.println(guid);
+//                }
+
 //                System.out.println(attribute.getID()+"----"+attribute.get());
             }
             System.out.println(JSON.toJSONString(attrList));
@@ -213,8 +222,12 @@ public class Test {
                 if (attr != null && attr.get() != null){
                     thisName = attr.get().toString();
                 }
-                System.out.println("组织名: "+ allParent+"---"+thisName);
-                queryOrgDataByParent(context,result.getNameInNamespace(),allParent+"---"+thisName);
+
+                Attribute objectGUID = attributes.get("objectGUID");
+                String guid = getObjectGUID((byte[]) objectGUID.get());
+
+                System.out.println("组织名: "+ allParent+"---"+thisName+"--"+guid);
+//                queryOrgDataByParent(context,result.getNameInNamespace(),allParent+"---"+thisName);
             }
 
         }catch (NamingException e){
@@ -260,9 +273,46 @@ public class Test {
                 SearchResult result = results.next();
                 Attributes attrs = result.getAttributes();
                 Attribute givenname = attrs.get("givenname");
+
+                Attribute objectGUID = attrs.get("objectGUID");
+                String guid = getObjectGUID((byte[]) objectGUID.get());
+
                 if (givenname != null) {
                     String username = givenname.get() == null ? "" : givenname.get().toString();
-                    System.out.println("用户名: " + username);
+                    System.out.println("用户名: " + username +"--"+guid);
+                }
+            }
+
+        } catch (NamingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void queryUserDataByOrgOfPage(InitialDirContext context,String baseDn){
+        try {
+            String searchFilter = "(objectClass=person)"; // 过滤条件
+
+            // 设置搜索控制项
+            SearchControls controls = new SearchControls();
+            controls.setSearchScope(SearchControls.ONELEVEL_SCOPE);
+            // 分页的两个参数
+            controls.setCountLimit(3);
+
+            // 执行搜索
+            NamingEnumeration<SearchResult> results = context.search(baseDn, searchFilter, controls);
+
+            // 遍历搜索结果
+            while (results.hasMore()) {
+                SearchResult result = results.next();
+                Attributes attrs = result.getAttributes();
+                Attribute givenname = attrs.get("givenname");
+
+                Attribute objectGUID = attrs.get("objectGUID");
+                String guid = getObjectGUID((byte[]) objectGUID.get());
+
+                if (givenname != null) {
+                    String username = givenname.get() == null ? "" : givenname.get().toString();
+                    System.out.println("用户名: " + username +"--"+guid);
                 }
             }
 
@@ -310,6 +360,46 @@ public class Test {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * guid转换
+     *
+     * @return
+     * @paramD
+     */
+    public static String getObjectGUID(byte[] GUID) {
+        String strGUID = "";
+        String byteGUID = "";
+        for (int c = 0; c < GUID.length; c++) {
+            byteGUID = byteGUID + "\\" + AddLeadingZero((int) GUID[c] & 0xFF);
+        }
+        strGUID = strGUID + AddLeadingZero((int) GUID[3] & 0xFF);
+        strGUID = strGUID + AddLeadingZero((int) GUID[2] & 0xFF);
+        strGUID = strGUID + AddLeadingZero((int) GUID[1] & 0xFF);
+        strGUID = strGUID + AddLeadingZero((int) GUID[0] & 0xFF);
+        strGUID = strGUID + "-";
+        strGUID = strGUID + AddLeadingZero((int) GUID[5] & 0xFF);
+        strGUID = strGUID + AddLeadingZero((int) GUID[4] & 0xFF);
+        strGUID = strGUID + "-";
+        strGUID = strGUID + AddLeadingZero((int) GUID[7] & 0xFF);
+        strGUID = strGUID + AddLeadingZero((int) GUID[6] & 0xFF);
+        strGUID = strGUID + "-";
+        strGUID = strGUID + AddLeadingZero((int) GUID[8] & 0xFF);
+        strGUID = strGUID + AddLeadingZero((int) GUID[9] & 0xFF);
+        strGUID = strGUID + "-";
+        strGUID = strGUID + AddLeadingZero((int) GUID[10] & 0xFF);
+        strGUID = strGUID + AddLeadingZero((int) GUID[11] & 0xFF);
+        strGUID = strGUID + AddLeadingZero((int) GUID[12] & 0xFF);
+        strGUID = strGUID + AddLeadingZero((int) GUID[13] & 0xFF);
+        strGUID = strGUID + AddLeadingZero((int) GUID[14] & 0xFF);
+        strGUID = strGUID + AddLeadingZero((int) GUID[15] & 0xFF);
+        return strGUID;
+    }
+
+    private static String AddLeadingZero(int k) {
+        return (k <= 0xF) ? "0" + Integer.toHexString(k) : Integer
+                .toHexString(k);
     }
 
 }

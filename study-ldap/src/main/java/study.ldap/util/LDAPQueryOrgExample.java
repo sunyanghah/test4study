@@ -13,7 +13,7 @@ import java.util.Hashtable;
 public class LDAPQueryOrgExample {
     public static void main(String[] args) {
         String ldapUrl = "ldap://10.21.121.188:389"; // LDAP服务器的URL
-        String bindDn = "CN=sic,OU=asiainfo-sec,OU=asiainfo-Users,DC=ais,DC=com"; // 管理员的DN
+        String bindDn = "CN=sic,OU=special,OU=asiainfo-Users,DC=ais,DC=com"; // 管理员的DN
         String bindPassword = "Asiainfo@QWE$%^"; // 管理员的密码
         String baseDn = "OU=业务与数据安全平台,OU=亚信安全OA,OU=asiainfo-sec,OU=asiainfo-Users,DC=ais,DC=com"; // 搜索的基础DN
         String searchFilter = "(objectClass=organizationalUnit)"; // 过滤条件

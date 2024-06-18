@@ -1,0 +1,8 @@
+server:
+  port: 8080
+
+rbi:
+  host: 10.28.194.175
+  user-data-dir: C:\cdp_user_data
+#  port-range: 2000-4000
+#  meta-dir: C:\Program Files\Google\Chrome\Application\chrome.exe

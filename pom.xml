@@ -57,6 +57,8 @@
         <module>study-chatgpt</module>
         <module>study-security-jwt</module>
         <module>study-ldap</module>
+        <module>study-cdp</module>
+        <module>study-cdp2</module>
     </modules>
 
     <properties>
