@@ -1,6 +1,10 @@
 package test.study.java.watermark;
 
 import lombok.Data;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
+import org.apache.pdfbox.pdmodel.PDDocumentInformation;
+import org.apache.pdfbox.pdmodel.common.PDMetadata;
 import org.apache.poi.hpsf.CustomProperties;
 import org.apache.poi.hpsf.DocumentSummaryInformation;
 import org.apache.poi.hslf.usermodel.HSLFSlideShow;
@@ -35,13 +39,14 @@ import java.util.Map;
 import static test.study.java.watermark.BusinessResponseEnum.MARK_ERROR;
 import static test.study.java.watermark.BusinessResponseEnum.UN_MARK_ERROR;
 
+
 /**
  * 暗水印工具类
  */
 public class HiddenWaterMarkUtil {
 
 	private static Logger logger = LoggerFactory.getLogger(HiddenWaterMarkUtil.class);
-
+	
 	private static final String HIDDEN_KEY = "META_WM";
 
 	private static final String OOXML = "OOXML";
@@ -121,7 +126,7 @@ public class HiddenWaterMarkUtil {
 	//图片暗水印方式
 	public final static class IMG_TYPE {
 		public final static int DCT = 1;//DCT
-		public final static int DFT = 2;//DFT
+    	public final static int DFT = 2;//DFT
 	}
 
 	@Data
@@ -133,68 +138,68 @@ public class HiddenWaterMarkUtil {
 	}
 
 	/**
-	 * excel .xls .et 操作修改
-	 * @param type true加暗水印false不加暗水印
-	 * @param inputStream
-	 * @param hiddenMarkStr 暗水印
-	 * @param map Map<页码, 列数,行数>
-	 * @return ByteArrayOutputStream
-	 */
-	public static ByteArrayOutputStream markerXls(boolean type, InputStream inputStream, String hiddenMarkStr, Map<Integer, RowCellParam> map) {
+     * excel .xls .et 操作修改
+     * @param type true加暗水印false不加暗水印
+     * @param inputStream
+     * @param hiddenMarkStr 暗水印
+     * @param map Map<页码, 列数,行数>
+     * @return ByteArrayOutputStream
+     */
+    public static ByteArrayOutputStream markerXls(boolean type, InputStream inputStream, String hiddenMarkStr, Map<Integer, RowCellParam> map) {
 		try {
 			hiddenMarkStr = AESUtil.Encrypt(hiddenMarkStr);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		ByteArrayOutputStream resOs = new ByteArrayOutputStream();
-		try (POIFSFileSystem pfs = new POIFSFileSystem(inputStream);
-			 HSSFWorkbook hssfWorkbook = new HSSFWorkbook(pfs)) {
-			if(type == true) { //加暗水印
-				DocumentSummaryInformation documentSummaryInformation = hssfWorkbook.getDocumentSummaryInformation();
+    	try (POIFSFileSystem pfs = new POIFSFileSystem(inputStream);
+    			HSSFWorkbook hssfWorkbook = new HSSFWorkbook(pfs)) {
+    		if(type == true) { //加暗水印
+    			DocumentSummaryInformation documentSummaryInformation = hssfWorkbook.getDocumentSummaryInformation();
 				if(documentSummaryInformation==null){
 					hssfWorkbook.createInformationProperties();
 					documentSummaryInformation = hssfWorkbook.getDocumentSummaryInformation();
 				}
-				CustomProperties customProperties = documentSummaryInformation.getCustomProperties();
-				if (customProperties == null) {
-					customProperties = new CustomProperties();
-				}
-				customProperties.put(HIDDEN_KEY, hiddenMarkStr);
-				documentSummaryInformation.setCustomProperties(customProperties);
-				//图片加注
+                CustomProperties customProperties = documentSummaryInformation.getCustomProperties();
+                if (customProperties == null) {
+                    customProperties = new CustomProperties();
+                }
+                customProperties.put(HIDDEN_KEY, hiddenMarkStr);
+                documentSummaryInformation.setCustomProperties(customProperties);
+                //图片加注
 //            	markerImgHSSF(hssfWorkbook, hiddenMarkStr);
-			}
-			//获取行列坐标,取空表格
-			getLastRowCell(map, hssfWorkbook, null);
-			if(type == true) { //加暗水印
-				//hssfWorkbook.writeProperties(pfs);//只操作属性
-				hssfWorkbook.write(resOs);
-			} else {
-				pfs.writeFilesystem(resOs);
-			}
-			return resOs;
-		} catch(Exception e) {
-			e.printStackTrace();
-			throw MARK_ERROR.newException();
-		}
-	}
+    		}
+    		//获取行列坐标,取空表格
+    		getLastRowCell(map, hssfWorkbook, null);
+    		if(type == true) { //加暗水印
+    			//hssfWorkbook.writeProperties(pfs);//只操作属性
+    			hssfWorkbook.write(resOs);
+    		} else {
+    			pfs.writeFilesystem(resOs);
+    		}
+    		return resOs;
+    	} catch(Exception e) {
+    		e.printStackTrace();
+    		throw MARK_ERROR.newException();
+    	}
+    }
 
-	/**
-	 * excel .xlsx 操作修改
-	 * @param type true加暗水印false不加暗水印
-	 * @param inputStream
-	 * @param hiddenMarkStr 暗水印
-	 * @param map Map<页码, 列数,行数>
-	 * @return ByteArrayOutputStream
-	 */
-	public static ByteArrayOutputStream markerXlsx(boolean type, InputStream inputStream, String hiddenMarkStr, Map<Integer, RowCellParam> map) {
+    /**
+     * excel .xlsx 操作修改
+     * @param type true加暗水印false不加暗水印
+     * @param inputStream
+     * @param hiddenMarkStr 暗水印
+     * @param map Map<页码, 列数,行数>
+     * @return ByteArrayOutputStream
+     */
+    public static ByteArrayOutputStream markerXlsx(boolean type, InputStream inputStream, String hiddenMarkStr, Map<Integer, RowCellParam> map) {
 		try {
 			hiddenMarkStr = AESUtil.Encrypt(hiddenMarkStr);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		ByteArrayOutputStream resOs = new ByteArrayOutputStream();
+    	ByteArrayOutputStream resOs = new ByteArrayOutputStream();
 		OPCPackage o = null;
 		try {
 			if(type == true) { //加暗水印
@@ -202,7 +207,7 @@ public class HiddenWaterMarkUtil {
 				POIXMLProperties p = new POIXMLProperties(o);
 				POIXMLProperties.CustomProperties customProperties = p.getCustomProperties();
 				//存在已有水印,没有put方法
-				checkProperties(customProperties, HIDDEN_KEY);
+            	checkProperties(customProperties, HIDDEN_KEY);
 				customProperties.addProperty(HIDDEN_KEY, hiddenMarkStr);
 				p.commit();
 				o.save(resOs);
@@ -210,7 +215,7 @@ public class HiddenWaterMarkUtil {
 		}catch (Exception e) {
 			e.printStackTrace();
 			throw MARK_ERROR.newException();
-		}finally {
+        }finally {
 			if(o!=null){
 				try{
 					o.close();
@@ -222,15 +227,15 @@ public class HiddenWaterMarkUtil {
 			}
 		}
 		return resOs;
-	}
+    }
 
-	/**
-	 * word .doc .wps 操作修改
-	 * @param inputStream
-	 * @param hiddenMarkStr 暗水印
-	 * @return ByteArrayOutputStream
-	 */
-	public static ByteArrayOutputStream markerDoc(InputStream inputStream, String hiddenMarkStr) {
+    /**
+     * word .doc .wps 操作修改
+     * @param inputStream
+     * @param hiddenMarkStr 暗水印
+     * @return ByteArrayOutputStream
+     */
+    public static ByteArrayOutputStream markerDoc(InputStream inputStream, String hiddenMarkStr) {
 		logger.info("开始添加水印...");
 
 		try {
@@ -239,32 +244,32 @@ public class HiddenWaterMarkUtil {
 			e.printStackTrace();
 		}
 
-		ByteArrayOutputStream resOs = new ByteArrayOutputStream();
-		try (POIFSFileSystem pfs = new POIFSFileSystem(inputStream);
-			 HWPFDocument hwpfDocument = new HWPFDocument(pfs);){
-			DocumentSummaryInformation documentSummaryInformation = hwpfDocument.getDocumentSummaryInformation();
-			CustomProperties customProperties = documentSummaryInformation.getCustomProperties();
-			if (null == customProperties) {
-				customProperties = new CustomProperties();
-			}
-			customProperties.put(HIDDEN_KEY, hiddenMarkStr);
-			documentSummaryInformation.setCustomProperties(customProperties);
-			hwpfDocument.writeProperties(pfs);
-			pfs.writeFilesystem(resOs);
-			return resOs;
-		} catch (Exception ex) {
+    	ByteArrayOutputStream resOs = new ByteArrayOutputStream();
+    	try (POIFSFileSystem pfs = new POIFSFileSystem(inputStream);
+    			HWPFDocument hwpfDocument = new HWPFDocument(pfs);){
+    		DocumentSummaryInformation documentSummaryInformation = hwpfDocument.getDocumentSummaryInformation();
+            CustomProperties customProperties = documentSummaryInformation.getCustomProperties();
+            if (null == customProperties) {
+                customProperties = new CustomProperties();
+            }
+            customProperties.put(HIDDEN_KEY, hiddenMarkStr);
+            documentSummaryInformation.setCustomProperties(customProperties);
+            hwpfDocument.writeProperties(pfs);
+            pfs.writeFilesystem(resOs);
+            return resOs;
+    	} catch (Exception ex) {
 			logger.error("word文件添加水印错误", ex);
 			throw MARK_ERROR.newException();
-		}
-	}
+        }
+    }
 
-	/**
-	 * word .docx 操作修改
-	 * @param inputStream
-	 * @param hiddenMarkStr 暗水印
-	 * @return ByteArrayOutputStream
-	 */
-	public static ByteArrayOutputStream markerDocx(InputStream inputStream, String hiddenMarkStr) {
+    /**
+     * word .docx 操作修改
+     * @param inputStream
+     * @param hiddenMarkStr 暗水印
+     * @return ByteArrayOutputStream
+     */
+    public static ByteArrayOutputStream markerDocx(InputStream inputStream, String hiddenMarkStr) {
 
 		try {
 			hiddenMarkStr = AESUtil.Encrypt(hiddenMarkStr);
@@ -272,30 +277,30 @@ public class HiddenWaterMarkUtil {
 			e.printStackTrace();
 		}
 
-		ByteArrayOutputStream resOs = new ByteArrayOutputStream();
-		try (XWPFDocument xwpfDoc = new XWPFDocument(inputStream)) {
-			POIXMLProperties.CustomProperties cust = xwpfDoc.getProperties().getCustomProperties();
-			//存在已有水印,没有put方法
-			checkProperties(cust, HIDDEN_KEY);
-			cust.addProperty(HIDDEN_KEY, hiddenMarkStr);
-			//图片加注
+    	ByteArrayOutputStream resOs = new ByteArrayOutputStream();
+    	try (XWPFDocument xwpfDoc = new XWPFDocument(inputStream)) {
+    		POIXMLProperties.CustomProperties cust = xwpfDoc.getProperties().getCustomProperties();
+    		//存在已有水印,没有put方法
+    		checkProperties(cust, HIDDEN_KEY);
+    		cust.addProperty(HIDDEN_KEY, hiddenMarkStr);
+    		//图片加注
 //        	markerImgXWPF(xwpfDoc, hiddenMarkStr);
-			xwpfDoc.write(resOs);
-			return resOs;
-		} catch (Exception ex) {
+            xwpfDoc.write(resOs);
+            return resOs;
+        } catch (Exception ex) {
 			ex.printStackTrace();
-			// 暗水印提取失败
+            // 暗水印提取失败
 			throw MARK_ERROR.newException();
-		}
-	}
+        }
+    }
 
-	/**
-	 * ppt .ppt .dps 操作修改
-	 * @param inputStream
-	 * @param hiddenMarkStr 暗水印
-	 * @return ByteArrayOutputStream
-	 */
-	public static ByteArrayOutputStream markerPpt(InputStream inputStream, String hiddenMarkStr) {
+    /**
+     * ppt .ppt .dps 操作修改
+     * @param inputStream
+     * @param hiddenMarkStr 暗水印
+     * @return ByteArrayOutputStream
+     */
+    public static ByteArrayOutputStream markerPpt(InputStream inputStream, String hiddenMarkStr) {
 
 		try {
 			hiddenMarkStr = AESUtil.Encrypt(hiddenMarkStr);
@@ -303,34 +308,34 @@ public class HiddenWaterMarkUtil {
 			e.printStackTrace();
 		}
 
-		ByteArrayOutputStream resOs = new ByteArrayOutputStream();
-		try (POIFSFileSystem pfs = new POIFSFileSystem(inputStream);
-			 HSLFSlideShow hslf = new HSLFSlideShow(pfs);) {
-			DocumentSummaryInformation documentSummaryInformation = hslf.getDocumentSummaryInformation();
-			CustomProperties customProperties = documentSummaryInformation.getCustomProperties();
-			if (customProperties == null) {
-				customProperties = new CustomProperties();
-			}
-			customProperties.put(HIDDEN_KEY, hiddenMarkStr);
-			documentSummaryInformation.setCustomProperties(customProperties);
-			//图片加注
+    	ByteArrayOutputStream resOs = new ByteArrayOutputStream();
+    	try (POIFSFileSystem pfs = new POIFSFileSystem(inputStream);
+    			HSLFSlideShow hslf = new HSLFSlideShow(pfs);) {
+    		DocumentSummaryInformation documentSummaryInformation = hslf.getDocumentSummaryInformation();
+            CustomProperties customProperties = documentSummaryInformation.getCustomProperties();
+            if (customProperties == null) {
+                customProperties = new CustomProperties();
+            }
+            customProperties.put(HIDDEN_KEY, hiddenMarkStr);
+            documentSummaryInformation.setCustomProperties(customProperties);
+            //图片加注
 //        	markerImgHSLF(hslf, hiddenMarkStr);
-			hslf.write(resOs);
-			//pfs.writeFilesystem(resOs);
-			return resOs;
-		} catch(Exception e) {
-			e.printStackTrace();
+            hslf.write(resOs);
+            //pfs.writeFilesystem(resOs);
+            return resOs;
+    	} catch(Exception e) {
+    		e.printStackTrace();
 			throw MARK_ERROR.newException();
-		}
-	}
+    	}
+    }
 
-	/**
-	 * ppt pptx 操作修改
-	 * @param inputStream
-	 * @param hiddenMarkStr 暗水印
-	 * @return ByteArrayOutputStream
-	 */
-	public static ByteArrayOutputStream markerPptx(InputStream inputStream, String hiddenMarkStr) {
+    /**
+     * ppt pptx 操作修改
+     * @param inputStream
+     * @param hiddenMarkStr 暗水印
+     * @return ByteArrayOutputStream
+     */
+    public static ByteArrayOutputStream markerPptx(InputStream inputStream, String hiddenMarkStr) {
 
 		try {
 			hiddenMarkStr = AESUtil.Encrypt(hiddenMarkStr);
@@ -338,44 +343,68 @@ public class HiddenWaterMarkUtil {
 			e.printStackTrace();
 		}
 
-		ByteArrayOutputStream resOs = new ByteArrayOutputStream();
-		try (XMLSlideShow xslfDoc = new XMLSlideShow(inputStream)) {
-			POIXMLProperties.CustomProperties cust = xslfDoc.getProperties().getCustomProperties();
-			//存在已有水印,没有put方法
-			checkProperties(cust, HIDDEN_KEY);
-			cust.addProperty(HIDDEN_KEY, hiddenMarkStr);
-			//图片加注
+    	ByteArrayOutputStream resOs = new ByteArrayOutputStream();
+    	try (XMLSlideShow xslfDoc = new XMLSlideShow(inputStream)) {
+    		POIXMLProperties.CustomProperties cust = xslfDoc.getProperties().getCustomProperties();
+    		//存在已有水印,没有put方法
+    		checkProperties(cust, HIDDEN_KEY);
+    		cust.addProperty(HIDDEN_KEY, hiddenMarkStr);
+    		//图片加注
 //        	markerImgXSLF(xslfDoc, hiddenMarkStr);
-			xslfDoc.write(resOs);
+    		xslfDoc.write(resOs);
+            return resOs;
+        } catch (Exception ex) {
+			ex.printStackTrace();
+            // 暗水印提取失败
+			throw MARK_ERROR.newException();
+        }
+    }
+
+	/**
+	 * pdf 操作修改
+	 * @param inputStream
+	 * @param hiddenMarkStr
+	 * @return
+	 */
+	public static ByteArrayOutputStream markerPdf(InputStream inputStream, String hiddenMarkStr){
+		try {
+			hiddenMarkStr = AESUtil.Encrypt(hiddenMarkStr);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		ByteArrayOutputStream resOs = new ByteArrayOutputStream();
+		try (PDDocument document = PDDocument.load(inputStream)) {
+			PDDocumentInformation info = document.getDocumentInformation();
+			info.setCustomMetadataValue(HIDDEN_KEY, hiddenMarkStr);
+			document.save(resOs);
 			return resOs;
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			// 暗水印提取失败
 			throw MARK_ERROR.newException();
 		}
 	}
 
-	/**
-	 * excel .xls .et 文件溯源, 接收文件流
-	 *
-	 * @param parseStream 溯源文件的流对象
-	 * @return java.lang.String 返回溯源结果
-	 * @date 2020/1/21 11:16
-	 */
-	public static String parseMarkerXls(InputStream parseStream) {
-		// 初始化溯源结果
-		String wmImplicit = null;
-		try (HSSFWorkbook hssfDoc = new HSSFWorkbook(parseStream)) {
-			// 提取Excel中的暗水印
-			DocumentSummaryInformation documentSummaryInformation = hssfDoc.getDocumentSummaryInformation();
-			CustomProperties customProperties = documentSummaryInformation.getCustomProperties();
-			if(customProperties.get(HIDDEN_KEY) != null) {
-				wmImplicit = String.valueOf(customProperties.get(HIDDEN_KEY));
-			}
-		} catch (Exception ex) {
+    /**
+     * excel .xls .et 文件溯源, 接收文件流
+     *
+     * @param parseStream 溯源文件的流对象
+     * @return java.lang.String 返回溯源结果
+     * @date 2020/1/21 11:16
+     */
+    public static String parseMarkerXls(InputStream parseStream) {
+        // 初始化溯源结果
+        String wmImplicit = null;
+        try (HSSFWorkbook hssfDoc = new HSSFWorkbook(parseStream)) {
+            // 提取Excel中的暗水印
+            DocumentSummaryInformation documentSummaryInformation = hssfDoc.getDocumentSummaryInformation();
+            CustomProperties customProperties = documentSummaryInformation.getCustomProperties();
+            if(customProperties.get(HIDDEN_KEY) != null) {
+            	wmImplicit = String.valueOf(customProperties.get(HIDDEN_KEY));
+            }
+        } catch (Exception ex) {
 			ex.printStackTrace();
 			throw UN_MARK_ERROR.newException();
-		}
+        }
 		try {
 			return wmImplicit == null ? null : AESUtil.Decrypt(wmImplicit);
 		} catch (Exception e) {
@@ -383,16 +412,16 @@ public class HiddenWaterMarkUtil {
 		}
 	}
 
-	/**
-	 * excel .xlsx 文件溯源, 接收文件流
-	 *
-	 * @param parseStream 溯源文件的流对象
-	 * @return java.lang.String 返回溯源结果
-	 * @date 2020/1/21 11:16
-	 */
-	public static String parseMarkerXlsx(InputStream parseStream) {
-		// 初始化溯源结果
-		String wmImplicit = null;
+    /**
+     * excel .xlsx 文件溯源, 接收文件流
+     *
+     * @param parseStream 溯源文件的流对象
+     * @return java.lang.String 返回溯源结果
+     * @date 2020/1/21 11:16
+     */
+    public static String parseMarkerXlsx(InputStream parseStream) {
+        // 初始化溯源结果
+    	String wmImplicit = null;
 		OPCPackage o = null;
 		try{
 			o = OPCPackage.open(parseStream);
@@ -405,7 +434,7 @@ public class HiddenWaterMarkUtil {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw UN_MARK_ERROR.newException();
-		} finally {
+        } finally {
 			if(o!=null){
 				try{
 					o.close();
@@ -420,205 +449,221 @@ public class HiddenWaterMarkUtil {
 		} catch (Exception e) {
 			return wmImplicit;
 		}
-	}
+    }
 
-	/**
-	 * word .doc .wps 文件溯源
-	 *
-	 * @param parseStream 溯源文件的流对象
-	 * @return java.lang.String 返回溯源信息
-	 * @date 2020/1/21 09:39
-	 */
-	public static String parseMarkerDoc(InputStream parseStream) {
-		// 初始化暗水印文本
-		String wmImplicit = null;
-		// 提取HWPF文件暗水印
-		try (HWPFDocument hwpfDoc = new HWPFDocument(parseStream)){
-			DocumentSummaryInformation documentSummaryInformation = hwpfDoc.getDocumentSummaryInformation();
-			CustomProperties customProperties = documentSummaryInformation.getCustomProperties();
-			if(customProperties != null && customProperties.get(HIDDEN_KEY) != null) {
-				wmImplicit = (String) customProperties.get(HIDDEN_KEY);
-			}
-		} catch (Exception ex) {
+    /**
+     * word .doc .wps 文件溯源
+     *
+     * @param parseStream 溯源文件的流对象
+     * @return java.lang.String 返回溯源信息
+     * @date 2020/1/21 09:39
+     */
+    public static String parseMarkerDoc(InputStream parseStream) {
+    	// 初始化暗水印文本
+        String wmImplicit = null;
+        // 提取HWPF文件暗水印
+        try (HWPFDocument hwpfDoc = new HWPFDocument(parseStream)){
+        	DocumentSummaryInformation documentSummaryInformation = hwpfDoc.getDocumentSummaryInformation();
+            CustomProperties customProperties = documentSummaryInformation.getCustomProperties();
+            if(customProperties != null && customProperties.get(HIDDEN_KEY) != null) {
+            	wmImplicit = (String) customProperties.get(HIDDEN_KEY);
+            }
+        } catch (Exception ex) {
 			ex.printStackTrace();
-			// 暗水印提取失败
+            // 暗水印提取失败
 			throw UN_MARK_ERROR.newException();
-		}
+        }
 		try {
 			return wmImplicit == null ? null : AESUtil.Decrypt(wmImplicit);
 		} catch (Exception e) {
 			return wmImplicit;
 		}
-	}
+    }
 
-	/**
-	 * word .docx 文件溯源
-	 *
-	 * @param parseStream 溯源文件的流对象
-	 * @return java.lang.String 返回溯源信息
-	 * @date 2020/1/21 09:39
-	 */
-	public static String parseMarkerDocx(InputStream parseStream) {
-		// 初始化暗水印文本
-		String wmImplicit = null;
-		// 提取XWPF文件暗水印
-		try (XWPFDocument xwpfDoc = new XWPFDocument(parseStream)) {
-			POIXMLProperties.CustomProperties cust = xwpfDoc.getProperties().getCustomProperties();
-			if(cust != null) {
-				CTProperty ctProperty = cust.getProperty(HIDDEN_KEY);
-				wmImplicit = ctProperty != null ? ctProperty.getLpwstr() : wmImplicit;
-			}
-		} catch (Exception ex) {
+    /**
+     * word .docx 文件溯源
+     *
+     * @param parseStream 溯源文件的流对象
+     * @return java.lang.String 返回溯源信息
+     * @date 2020/1/21 09:39
+     */
+    public static String parseMarkerDocx(InputStream parseStream) {
+    	// 初始化暗水印文本
+        String wmImplicit = null;
+        // 提取XWPF文件暗水印
+        try (XWPFDocument xwpfDoc = new XWPFDocument(parseStream)) {
+            POIXMLProperties.CustomProperties cust = xwpfDoc.getProperties().getCustomProperties();
+            if(cust != null) {
+            	CTProperty ctProperty = cust.getProperty(HIDDEN_KEY);
+                wmImplicit = ctProperty != null ? ctProperty.getLpwstr() : wmImplicit;
+            }
+        } catch (Exception ex) {
 			ex.printStackTrace();
-			// 暗水印提取失败
+            // 暗水印提取失败
 			throw UN_MARK_ERROR.newException();
-		}
+        }
 		try {
 			return wmImplicit == null ? null : AESUtil.Decrypt(wmImplicit);
 		} catch (Exception e) {
 			return wmImplicit;
 		}
-	}
+    }
 
-	/**
-	 * ppt .ppt .dps 文件溯源
-	 *
-	 * @param parseStream 溯源文件的流对象
-	 * @return java.lang.String 返回溯源信息
-	 * @date 2021/1/25 09:39
-	 */
-	public static String parseMarkerPpt(InputStream parseStream) {
-		String wmImplicit = null;
-		try (HSLFSlideShowImpl hslfDoc = new HSLFSlideShowImpl(parseStream)){
-			DocumentSummaryInformation documentSummaryInformation = hslfDoc.getDocumentSummaryInformation();
-			CustomProperties customProperties = documentSummaryInformation.getCustomProperties();
-			if(customProperties != null && customProperties.get(HIDDEN_KEY) != null) {
-				wmImplicit = (String) customProperties.get(HIDDEN_KEY);
-			}
-		} catch (Exception ex) {
+    /**
+     * ppt .ppt .dps 文件溯源
+     *
+     * @param parseStream 溯源文件的流对象
+     * @return java.lang.String 返回溯源信息
+     * @date 2021/1/25 09:39
+     */
+    public static String parseMarkerPpt(InputStream parseStream) {
+        String wmImplicit = null;
+        try (HSLFSlideShowImpl hslfDoc = new HSLFSlideShowImpl(parseStream)){
+        	DocumentSummaryInformation documentSummaryInformation = hslfDoc.getDocumentSummaryInformation();
+            CustomProperties customProperties = documentSummaryInformation.getCustomProperties();
+            if(customProperties != null && customProperties.get(HIDDEN_KEY) != null) {
+            	wmImplicit = (String) customProperties.get(HIDDEN_KEY);
+            }
+        } catch (Exception ex) {
 			ex.printStackTrace();
-			// 暗水印提取失败
+            // 暗水印提取失败
 			throw UN_MARK_ERROR.newException();
-		}
+        }
 		try {
 			return wmImplicit == null ? null : AESUtil.Decrypt(wmImplicit);
 		} catch (Exception e) {
 			return wmImplicit;
 		}
-	}
+    }
 
-	/**
-	 * ppt .pptx 文件溯源
-	 *
-	 * @param parseStream 溯源文件的流对象
-	 * @return java.lang.String 返回溯源信息
-	 * @date 2021/1/25 09:39
-	 */
-	public static String parseMarkerPptx(InputStream parseStream) {
-		String wmImplicit = null;
-		try (XMLSlideShow xslfDoc = new XMLSlideShow(parseStream)){
-			POIXMLProperties.CustomProperties cust = xslfDoc.getProperties().getCustomProperties();
-			if(cust != null) {
-				CTProperty ctProperty = cust.getProperty(HIDDEN_KEY);
-				wmImplicit = ctProperty != null ? ctProperty.getLpwstr() : wmImplicit;
-			}
-		} catch (Exception ex) {
+    /**
+     * ppt .pptx 文件溯源
+     *
+     * @param parseStream 溯源文件的流对象
+     * @return java.lang.String 返回溯源信息
+     * @date 2021/1/25 09:39
+     */
+    public static String parseMarkerPptx(InputStream parseStream) {
+        String wmImplicit = null;
+        try (XMLSlideShow xslfDoc = new XMLSlideShow(parseStream)){
+        	POIXMLProperties.CustomProperties cust = xslfDoc.getProperties().getCustomProperties();
+            if(cust != null) {
+            	CTProperty ctProperty = cust.getProperty(HIDDEN_KEY);
+                wmImplicit = ctProperty != null ? ctProperty.getLpwstr() : wmImplicit;
+            }
+        } catch (Exception ex) {
 			ex.printStackTrace();
-			// 暗水印提取失败
+            // 暗水印提取失败
 			throw UN_MARK_ERROR.newException();
-		}
+        }
 		try {
 			return wmImplicit == null ? null : AESUtil.Decrypt(wmImplicit);
 		} catch (Exception e) {
 			return wmImplicit;
 		}
-	}
+    }
 
 	/**
-	 * excel获取每页最后数据栏
-	 * @param hssfWorkbook
-	 * @param xssfWorkbook
-	 * @return Map<页码, 列数,行数>
+	 * pdf 文件溯源
+	 * @param parseStream
+	 * @return
 	 */
-	private static void getLastRowCell(Map<Integer, RowCellParam> map, HSSFWorkbook hssfWorkbook, XSSFWorkbook xssfWorkbook) {
-		//获取行列坐标,取空表格
-		if(map == null) {
-			return;
+	public static String parseMarkerPdf(InputStream parseStream){
+		try(PDDocument document = PDDocument.load(parseStream)){
+			PDDocumentInformation info = document.getDocumentInformation();
+			String customMetadataValue = info.getCustomMetadataValue(HIDDEN_KEY);
+			return AESUtil.Decrypt(customMetadataValue);
+		}catch (Exception ex){
+			throw UN_MARK_ERROR.newException();
 		}
-		if(xssfWorkbook == null) {
-			for(int i = 0 ; i < hssfWorkbook.getNumberOfSheets(); i ++) {
-				HSSFSheet sheet = hssfWorkbook.getSheetAt(i);
-				if(sheet != null) {
-					Integer lastRow = sheet.getLastRowNum();
-					//System.out.println("Row:" + i + ",lastRow:" + lastRow);
-					if(lastRow > -1) {
-						Integer lastCell = -1;
-						for(int j = 0 ; j <= lastRow ; j ++) {
-							if(sheet.getRow(j) != null) {
-								short last = sheet.getRow(j).getLastCellNum();
-								lastCell = lastCell < last ? last : lastCell;
-								//System.out.println("Row:" + i + ",old:" + lastCell + ",new:" + last);
-							}
-						}
-						if(lastCell > -1) {
-							RowCellParam rowCellParam = new RowCellParam();
-							rowCellParam.setCell(lastCell);
-							rowCellParam.setRow(lastRow);
-							map.put(i, rowCellParam);
-						}
-					}
-				}
-			}
-		} else {
-			for(int i = 0 ; i < xssfWorkbook.getNumberOfSheets(); i ++) {
-				XSSFSheet sheet = xssfWorkbook.getSheetAt(i);
-				if(sheet != null) {
-					Integer lastRow = sheet.getLastRowNum();
-					//System.out.println("Row:" + i + ",lastRow:" + lastRow);
-					if(lastRow > -1) {
-						Integer lastCell = -1;
-						for(int j = 0 ; j <= lastRow ; j ++) {
-							if(sheet.getRow(j) != null) {
-								short last = sheet.getRow(j).getLastCellNum();
-								lastCell = lastCell < last ? last : lastCell;
-								//System.out.println("Row:" + i + ",old:" + lastCell + ",new:" + last);
-							}
-						}
-						if(lastCell > -1) {
-							RowCellParam rowCellParam = new RowCellParam();
-							rowCellParam.setCell(lastCell);
-							rowCellParam.setRow(lastRow);
-							map.put(i, rowCellParam);
-						}
-					}
-				}
-			}
-		}
+
 	}
 
-	/**
-	 * 检验是否已存在属性
-	 * @param cust
-	 * @param key 属性名
-	 */
-	private static void checkProperties(POIXMLProperties.CustomProperties cust, String key) {
-		//存在已有水印,没有put方法
-		if(cust != null && cust.contains(key)) {
-			List<CTProperty> list = cust.getUnderlyingProperties().getPropertyList();
-			for(int i = 0 ; i < list.size() ; i ++) {
-				if((list.get(i).getName()).equals(key)) {
-					list.remove(i);//删除掉
-					break;
-				}
-			}
-		}
-	}
+    /**
+     * excel获取每页最后数据栏
+     * @param hssfWorkbook
+     * @param xssfWorkbook
+     * @return Map<页码, 列数,行数>
+     */
+    private static void getLastRowCell(Map<Integer, RowCellParam> map, HSSFWorkbook hssfWorkbook, XSSFWorkbook xssfWorkbook) {
+    	//获取行列坐标,取空表格
+    	if(map == null) {
+    		return;
+    	}
+    	if(xssfWorkbook == null) {
+    		for(int i = 0 ; i < hssfWorkbook.getNumberOfSheets(); i ++) {
+            	HSSFSheet sheet = hssfWorkbook.getSheetAt(i);
+    			if(sheet != null) {
+    				Integer lastRow = sheet.getLastRowNum();
+    				//System.out.println("Row:" + i + ",lastRow:" + lastRow);
+    				if(lastRow > -1) {
+    					Integer lastCell = -1;
+        				for(int j = 0 ; j <= lastRow ; j ++) {
+        					if(sheet.getRow(j) != null) {
+        						short last = sheet.getRow(j).getLastCellNum();
+        						lastCell = lastCell < last ? last : lastCell;
+        						//System.out.println("Row:" + i + ",old:" + lastCell + ",new:" + last);
+        					}
+        				}
+        				if(lastCell > -1) {
+        					RowCellParam rowCellParam = new RowCellParam();
+        					rowCellParam.setCell(lastCell);
+        					rowCellParam.setRow(lastRow);
+        					map.put(i, rowCellParam);
+        				}
+        			}
+    			}
+    		}
+    	} else {
+    		for(int i = 0 ; i < xssfWorkbook.getNumberOfSheets(); i ++) {
+            	XSSFSheet sheet = xssfWorkbook.getSheetAt(i);
+    			if(sheet != null) {
+    				Integer lastRow = sheet.getLastRowNum();
+    				//System.out.println("Row:" + i + ",lastRow:" + lastRow);
+    				if(lastRow > -1) {
+    					Integer lastCell = -1;
+        				for(int j = 0 ; j <= lastRow ; j ++) {
+        					if(sheet.getRow(j) != null) {
+        						short last = sheet.getRow(j).getLastCellNum();
+        						lastCell = lastCell < last ? last : lastCell;
+        						//System.out.println("Row:" + i + ",old:" + lastCell + ",new:" + last);
+        					}
+        				}
+        				if(lastCell > -1) {
+        					RowCellParam rowCellParam = new RowCellParam();
+        					rowCellParam.setCell(lastCell);
+        					rowCellParam.setRow(lastRow);
+        					map.put(i, rowCellParam);
+        				}
+        			}
+    			}
+    		}
+    	}
+    }
 
-	/**
-	 * excel xlsx 附件图片暗水印加注
-	 * @param xssfWorkbook
-	 * @param hiddenMarkStr 暗水印
-	 */
+    /**
+     * 检验是否已存在属性
+     * @param cust
+     * @param key 属性名
+     */
+    private static void checkProperties(POIXMLProperties.CustomProperties cust, String key) {
+    	//存在已有水印,没有put方法
+    	if(cust != null && cust.contains(key)) {
+    		List<CTProperty> list = cust.getUnderlyingProperties().getPropertyList();
+    		for(int i = 0 ; i < list.size() ; i ++) {
+    			if((list.get(i).getName()).equals(key)) {
+    				list.remove(i);//删除掉
+    				break;
+    			}
+    		}
+    	}
+    }
+
+    /**
+     * excel xlsx 附件图片暗水印加注
+     * @param xssfWorkbook
+     * @param hiddenMarkStr 暗水印
+     */
 //    private static void markerImgXSSF(XSSFWorkbook xssfWorkbook, String hiddenMarkStr) {
 ////    	if(ANNEX_TYPE.EXCEL.IMG != MARK_TYPE.YES) {
 ////    		return ;
@@ -648,11 +693,11 @@ public class HiddenWaterMarkUtil {
 //    	}
 //    }
 
-	/**
-	 * excel xls 附件图片暗水印加注
-	 * @param hssfWorkbook
-	 * @param hiddenMarkStr 暗水印
-	 */
+    /**
+     * excel xls 附件图片暗水印加注
+     * @param hssfWorkbook
+     * @param hiddenMarkStr 暗水印
+     */
 //    private static void markerImgHSSF(HSSFWorkbook hssfWorkbook, String hiddenMarkStr) throws Exception {
 ////    	if(ANNEX_TYPE.EXCEL.IMG != MARK_TYPE.YES) {
 ////    		return ;
@@ -701,11 +746,11 @@ public class HiddenWaterMarkUtil {
 //    	}
 //    }
 
-	/**
-	 * word docx 附件图片暗水印加注
-	 * @param doc
-	 * @param hiddenMarkStr 暗水印
-	 */
+    /**
+     * word docx 附件图片暗水印加注
+     * @param doc
+     * @param hiddenMarkStr 暗水印
+     */
 //    private static void markerImgXWPF(XWPFDocument doc, String hiddenMarkStr) throws Exception {
 ////    	if(ANNEX_TYPE.WORD.IMG != MARK_TYPE.YES) {
 ////    		return ;
@@ -739,11 +784,11 @@ public class HiddenWaterMarkUtil {
 //    	}
 //    }
 
-	/**
-	 * pptx 附件图片暗水印加注
-	 * @param doc
-	 * @param hiddenMarkStr 暗水印
-	 */
+    /**
+     * pptx 附件图片暗水印加注
+     * @param doc
+     * @param hiddenMarkStr 暗水印
+     */
 //    private static void markerImgXSLF(XMLSlideShow doc, String hiddenMarkStr) throws Exception {
 ////    	if(ANNEX_TYPE.PPT.IMG != MARK_TYPE.YES) {
 ////    		return ;
@@ -764,11 +809,11 @@ public class HiddenWaterMarkUtil {
 //		}
 //    }
 
-	/**
-	 * ppt dps 附件图片暗水印加注
-	 * @param doc
-	 * @param hiddenMarkStr 暗水印
-	 */
+    /**
+     * ppt dps 附件图片暗水印加注
+     * @param doc
+     * @param hiddenMarkStr 暗水印
+     */
 //    private static void markerImgHSLF(HSLFSlideShow doc, String hiddenMarkStr) throws Exception {
 ////    	if(ANNEX_TYPE.PPT.IMG != MARK_TYPE.YES) {
 ////    		return ;
@@ -806,45 +851,45 @@ public class HiddenWaterMarkUtil {
 //		}
 //    }
 
-	/**
-	 * 删除
-	 * @param xssfPicture
-	 */
-	public static void deleteXSSFPicture(XSSFPicture xssfPicture) {
-		String rId = xssfPicture.getCTPicture().getBlipFill().getBlip().getEmbed();
+    /**
+     * 删除
+     * @param xssfPicture
+     */
+    public static void deleteXSSFPicture(XSSFPicture xssfPicture) {
+    	String rId = xssfPicture.getCTPicture().getBlipFill().getBlip().getEmbed();
 		XSSFDrawing drawing = xssfPicture.getDrawing();
 		drawing.getPackagePart().removeRelationship(rId);
 		drawing.getPackagePart().getPackage().deletePartRecursive(drawing.getRelationById(rId).getPackagePart().getPartName());
 		XmlCursor cursor = xssfPicture.getCTPicture().newCursor();
-		cursor.toParent();
-		if (cursor.getObject() instanceof CTTwoCellAnchor) {
+        cursor.toParent();
+        if (cursor.getObject() instanceof CTTwoCellAnchor) {
 			for (int i = 0; i < drawing.getCTDrawing().getTwoCellAnchorList().size(); i++) {
 				if (cursor.getObject().equals(drawing.getCTDrawing().getTwoCellAnchorArray(i))) {
 					drawing.getCTDrawing().removeTwoCellAnchor(i);
-				}
-			}
-		} else if (cursor.getObject() instanceof CTOneCellAnchor) {
+                }
+            }
+        } else if (cursor.getObject() instanceof CTOneCellAnchor) {
 			for (int i = 0; i < drawing.getCTDrawing().getOneCellAnchorList().size(); i++) {
 				if (cursor.getObject().equals(drawing.getCTDrawing().getOneCellAnchorArray(i))) {
 					drawing.getCTDrawing().removeOneCellAnchor(i);
-				}
+                }
 			}
 		} else if (cursor.getObject() instanceof CTAbsoluteAnchor) {
 			for (int i = 0; i < drawing.getCTDrawing().getAbsoluteAnchorList().size(); i++) {
 				if (cursor.getObject().equals(drawing.getCTDrawing().getAbsoluteAnchorArray(i))) {
 					drawing.getCTDrawing().removeAbsoluteAnchor(i);
 				}
-			}
+            }
 		}
-	}
+    }
 
-	/**
-	 * 图片加注暗水印方式
-	 * @param type 1:DCT 2 DFT
-	 * @param data 图片内容
-	 * @param hiddenMarkStr 暗水印
-	 * @return
-	 */
+    /**
+     * 图片加注暗水印方式
+     * @param type 1:DCT 2 DFT
+     * @param data 图片内容
+     * @param hiddenMarkStr 暗水印
+     * @return
+     */
 //    public static ByteArrayOutputStream markerImg(int type, byte[] data, String hiddenMarkStr) {
 //    	InputStream inImg = new ByteArrayInputStream(data);
 //    	String markStr = AnalysisUtil.base64Key(2, hiddenMarkStr);//转换明文
@@ -859,4 +904,6 @@ public class HiddenWaterMarkUtil {
 //    	return os;
 //		return null;
 //    }
+
+
 }

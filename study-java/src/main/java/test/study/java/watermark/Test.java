@@ -104,13 +104,13 @@ public class Test {
 
     public static void main(String[] args) throws Exception{
 
-        testDocx();
+//        testDocx();
 //        testDoc();
 //        testXlsx();
 //        testXls();
 //        testPptx();
 //        testPpt();
-
+        testPdf();
 
     }
 
@@ -216,6 +216,23 @@ public class Test {
         String watermark = HiddenWaterMarkUtil.parseMarkerPpt(new FileInputStream(file));
         System.out.println("--------------==------");
         System.out.println(ZzSecurityHelper.decryptAES(watermark));
+    }
+
+    public static void testPdf() throws Exception{
+        File file = new File("F:\\watermark\\元界-管理平台-总体设计.pdf");
+        FileInputStream fileInputStream = new FileInputStream(file);
+        ByteArrayOutputStream outputStream = HiddenWaterMarkUtil.markerPdf(fileInputStream, "this is my pdf watermark22");
+        // 写回到文件
+        FileOutputStream fileOutputStream = new FileOutputStream(file);
+        fileOutputStream.write(outputStream.toByteArray());
+        fileInputStream.close();
+        fileOutputStream.flush();
+        fileOutputStream.close();
+
+
+        String watermark = HiddenWaterMarkUtil.parseMarkerPdf(new FileInputStream(file));
+        System.out.println("--------------==------");
+        System.out.println(watermark);
     }
 
 }

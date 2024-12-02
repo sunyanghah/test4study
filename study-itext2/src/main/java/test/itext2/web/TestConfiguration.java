@@ -17,5 +17,5 @@ public class TestConfiguration extends Configuration implements MarkdownBundleCo
         return assets;
     }
 
-    in
+
 }
