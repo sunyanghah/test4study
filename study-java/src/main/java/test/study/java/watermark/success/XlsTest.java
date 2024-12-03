@@ -28,11 +28,11 @@ public class XlsTest {
 
     public static void main(String[] args) throws Exception {
         ByteArrayOutputStream outputStream = addToXls(new FileInputStream("F:\\watermark\\success\\xls.xls"),
-                new String[]{"这是xls水印", "第二行", "第三行"},
+                new String[]{"这是xls水印手动阀萨芬广东发斯蒂芬我惹我文身断发士大夫", "第二行", "第三行"},
                 16,
                 "#FF0000",
                 100,
-                45);
+                90);
 
         outputStream.writeTo(new FileOutputStream("F:\\watermark\\success\\result\\xls.xls"));
 
@@ -63,13 +63,14 @@ public class XlsTest {
         _records.setAccessible(true);
         @SuppressWarnings("unchecked")
         List<RecordBase> records = (List<RecordBase>)_records.get(internalsheet);
-
+        Font font = new Font("微软雅黑", Font.PLAIN, fontSize);
+        int imageSize = WatermarkUtil.calculateSize(textArr, font, rotate);
         //生成水印
         BufferedImage bufferedImage = WatermarkUtil.createSingleWaterMark(
                 WatermarkUtil.transText(textArr),
-                200, 150,
+                imageSize, imageSize,
                 WatermarkUtil.hexStringToColor(fontColor,opacity),
-                new Font("微软雅黑", Font.BOLD, fontSize),
+                font,
                 rotate);
 
         // get bytes of the image file

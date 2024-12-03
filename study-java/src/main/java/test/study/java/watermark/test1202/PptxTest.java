@@ -25,10 +25,11 @@ public class PptxTest {
 
     public static void main(String[] args) throws Exception {
         ByteArrayOutputStream outputStream = addToPpt(new FileInputStream("F:\\watermark\\success\\pptx.pptx"),
-                new String[]{"这是pptx水印", "第二行", "第三行"},
-                16,
+                new String[]{"这是pptx水印四", "第二行", "第三行","第四行","第五行","第六行","第七行","第八行","第九行",
+                        "第十行","十一行","十二行","第八行","第九行","第十行","十一行","十二行","第十行","十一行","十二行","第八行","第九行","第十行","十一行","十二行"},
+                14,
                 "#FF0000",
-                10,
+                100,
                 45);
 
         outputStream.writeTo(new FileOutputStream("F:\\watermark\\success\\result\\pptx.pptx"));

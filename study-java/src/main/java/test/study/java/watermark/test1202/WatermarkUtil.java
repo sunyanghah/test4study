@@ -195,49 +195,64 @@ public class WatermarkUtil {
             totalHeight += bounds.getHeight()+LINE_SPACE; // 增加固定行间距
         }
 
-        // 计算最小半径，避免旋转后，水印不够
-        double minRadius = Math.min(maxWidth,totalHeight);
+        // 计算最大半径，避免旋转后水印文字互相重叠
         double maxRadius = Math.max(maxWidth,totalHeight);
 
         // 计算可以放置水印的最大行数和列数
-        int columns = (int) (width / (minRadius + horizontalGap))+1;
-        int rows = (int) (height / (minRadius + verticalGap))+1;
+        int columns = Math.max((int) (width / (maxRadius + horizontalGap)), 1);
+        int rows = Math.max((int) (height / (maxRadius + verticalGap)), 1);
 
-        // 绘制水印文字
-        for (int row = 0; row < 1; row++) {
-            for (int col = 0; col < 1; col++) {
-                // 计算水印文字的位置
-                double x = (col * (maxRadius + horizontalGap)) + (maxRadius / 10);
-                double y = (row * (maxRadius + verticalGap + LINE_SPACE)) + (maxRadius / 10);
-                int lineIndex = (row * columns + col) * lineCount;
+        if (columns == 1 && rows == 1){
+            double x = (width - maxWidth) / 2;
+            double y = (height/2)-(font.getStringBounds(lines[0],context).getHeight()*(lines.length/2));
+            // 倾斜角度
+            double radians = Math.toRadians(shearAngle);
+            double originX = x + maxWidth/2;
+            double originY = y + totalHeight/2;
+            g2d.rotate(radians, originX, originY);
 
-                // 倾斜角度
-                double radians = Math.toRadians(shearAngle);
-                double originX = x + maxWidth/2;
-                double originY = y + totalHeight/2;
-                g2d.rotate(radians, originX, originY);
+            for (int i = 0; i < lineCount; i++) {
+                String line = lines[i];
+                Rectangle2D bounds = font.getStringBounds(line, context);
+                // 居中效果后的x坐标
+                double centerX = x + (maxWidth - bounds.getWidth()) / 2;
+                // y坐标
+                g2d.drawString(line, (int) centerX, (int)y);
+                y += bounds.getHeight() + LINE_SPACE; // 增加固定行间距
+            }
+            g2d.rotate(-radians, originX, originY); // 恢复原始状态
 
-                for (int i = 0; i < lineCount; i++) {
-                    String line = lines[i];
-                    Rectangle2D bounds = font.getStringBounds(line, context);
-                    double ascent = bounds.getHeight() - bounds.getY();
+        }else {
+            // 绘制水印文字
+            for (int row = 0; row < rows + 1; row++) {
+                for (int col = 0; col < columns + 1; col++) {
 
-                    // 居中效果后的x坐标
-                    double centerX = x + (maxWidth - bounds.getWidth()) / 2;
-                    // y坐标
-                    double lineY = y - ascent;
-                    g2d.drawString(line, (int) centerX, (int)lineY);
+                    // 计算水印文字的位置
+                   double x = (col * (maxRadius + horizontalGap)) + (maxRadius / 10);
+                   double y = (row * (maxRadius + verticalGap + LINE_SPACE)) + (maxRadius / 10);
 
-                    y += bounds.getHeight() + LINE_SPACE; // 增加固定行间距
-                    if (lineIndex + i + 1 >= rows * columns * lineCount) {
-                        break;
+                    // 倾斜角度
+                    double radians = Math.toRadians(shearAngle);
+                    double originX = x + maxWidth / 2;
+                    double originY = y + totalHeight / 2;
+                    g2d.rotate(radians, originX, originY);
+
+                    for (int i = 0; i < lineCount; i++) {
+                        String line = lines[i];
+                        Rectangle2D bounds = font.getStringBounds(line, context);
+                        double ascent = bounds.getHeight() - bounds.getY();
+
+                        // 居中效果后的x坐标
+                        double centerX = x + (maxWidth - bounds.getWidth()) / 2;
+                        // y坐标
+                        double lineY = y - ascent;
+                        g2d.drawString(line, (int) centerX, (int) lineY);
+                        y += bounds.getHeight() + LINE_SPACE; // 增加固定行间距
                     }
+                    g2d.rotate(-radians, originX, originY); // 恢复原始状态
                 }
-
-                g2d.rotate(-radians, originX, originY); // 恢复原始状态
             }
         }
-
         // 释放对象
         g2d.dispose();
         return image;

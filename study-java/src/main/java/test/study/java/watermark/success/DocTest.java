@@ -1,9 +1,6 @@
 package test.study.java.watermark.success;
 
-import com.spire.doc.Document;
-import com.spire.doc.FileFormat;
-import com.spire.doc.HeaderFooter;
-import com.spire.doc.Section;
+import com.spire.doc.*;
 import com.spire.doc.documents.Paragraph;
 import com.spire.doc.documents.TextWrappingStyle;
 import com.spire.doc.fields.DocPicture;
@@ -25,10 +22,10 @@ public class DocTest {
 
         ByteArrayOutputStream outputStream = addToDoc(new FileInputStream("F:\\watermark\\success\\doc.doc"),
                 new String[]{"这是doc水印", "第二行", "第三行"},
-                16,
+                14,
                 "#FF0000",
-                60,
-                45);
+                30,
+                90);
 
         outputStream.writeTo(new FileOutputStream("F:\\watermark\\success\\result\\doc.doc"));
 
@@ -43,10 +40,13 @@ public class DocTest {
         //Load the image
         DocPicture picture = new DocPicture(doc);
 
+        Font font = new Font("微软雅黑", Font.PLAIN, fontSize);
+        int imageSize = WatermarkUtil.calculateSize(textArr, font, rotate);
+
         byte[] imageBytes = WatermarkUtil.createSingleWaterMarkOfBytes(WatermarkUtil.transText(textArr),
-                100, 100,
+                imageSize, imageSize,
                 WatermarkUtil.hexStringToColor(fontColor,opacity)
-                , new Font("微软雅黑", Font.BOLD, fontSize),rotate);
+                ,font ,rotate);
 
         picture.loadImage(imageBytes);
 
@@ -66,15 +66,34 @@ public class DocTest {
                 paragrapg1 = header.addParagraph();
             }
 
-            for (int p = 0; p < 5; p++) {
+            int spaceWidth = 100;
+            int spaceHeight = 150;
 
-                for (int q = 0; q < 3; q++) {
+            int x = -20;
+            int y = 50;
+
+            PageSetup pageSetup = doc.getSections().get(0).getPageSetup();
+            float clientWidth = pageSetup.getClientWidth();
+            int widthNum = (int)(clientWidth / imageSize) + 1;
+
+            float clientHeight = pageSetup.getClientHeight();
+            int heightNum = (int)(clientHeight / imageSize) + 1;
+
+            for (int p = 0; p < heightNum; p++) {
+
+                int verticalPosition = y;
+                for (int q = 0; q < widthNum; q++) {
                     //copy the image and add it to many places
                     picture = (DocPicture)picture.deepClone();
-                    picture.setVerticalPosition(50 + 150 * p);
-                    picture.setHorizontalPosition(20 + 160 * q);
+                    picture.setVerticalPosition(verticalPosition);
+                    picture.setHorizontalPosition(x);
                     paragrapg1.getChildObjects().add(picture);
+
+                    verticalPosition += imageSize + spaceHeight;
                 }
+
+                x += imageSize + spaceWidth;
+
             }
         }
 

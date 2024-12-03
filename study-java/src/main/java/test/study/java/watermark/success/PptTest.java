@@ -25,7 +25,7 @@ public class PptTest {
 
     public static void main(String[] args) throws Exception {
         ByteArrayOutputStream outputStream = addToPpt(new FileInputStream("F:\\watermark\\success\\ppt.ppt"),
-                new String[]{"这是ppt水印", "第二行", "第三行"},
+                new String[]{"这是ppt手动阀萨芬", "第二行", "第三行","第四行"},
                 16,
                 "#FF0000",
                 60,

@@ -19,10 +19,10 @@ public class XlsxTest {
 
     public static void main(String[] args) throws Exception{
         ByteArrayOutputStream outputStream = addToXlsx(new FileInputStream("F:\\watermark\\success\\xlsx.xlsx"),
-                new String[]{"这是xlsx水印", "第二行", "第三行"},
+                new String[]{"这是xlsx水印是的发生大法师答复萨芬四大分三大发撒都发啥打法萨达发撒代发", "第二行", "第三行"},
                 16,
                 "#FF0000",
-                10,
+                100,
                 45);
 
         outputStream.writeTo(new FileOutputStream("F:\\watermark\\success\\result\\xlsx.xlsx"));
@@ -31,12 +31,14 @@ public class XlsxTest {
     public static ByteArrayOutputStream addToXlsx(InputStream inputStream, String[] textArr,
                                                  int fontSize, String fontColor, int opacity, int rotate) throws Exception {
         XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
+        Font font = new Font("微软雅黑", Font.PLAIN, fontSize);
+        int imageSize = WatermarkUtil.calculateSize(textArr, font, rotate);
         //生成水印
         byte[] waterMarkBytes = WatermarkUtil.createSingleWaterMarkOfBytes(
                 WatermarkUtil.transText(textArr),
-                200, 150,
+                imageSize, imageSize,
                 WatermarkUtil.hexStringToColor(fontColor,opacity),
-                new Font("微软雅黑", Font.BOLD, fontSize),
+                font,
                 rotate);
         int numberOfSheets = workbook.getNumberOfSheets();
         for (int i = 0; i < numberOfSheets; i++) {
