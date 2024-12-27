@@ -8,6 +8,7 @@ import com.spire.presentation.drawing.BackgroundType;
 import com.spire.presentation.drawing.FillFormatType;
 import com.spire.presentation.drawing.IImageData;
 import com.spire.presentation.drawing.PictureFillType;
+import test.study.java.watermark.WatermarkUtil;
 
 import java.awt.*;
 import java.awt.geom.Dimension2D;
@@ -24,15 +25,14 @@ import java.io.InputStream;
 public class PptxTest {
 
     public static void main(String[] args) throws Exception {
-        ByteArrayOutputStream outputStream = addToPpt(new FileInputStream("F:\\watermark\\success\\pptx.pptx"),
-                new String[]{"这是pptx水印四", "第二行", "第三行","第四行","第五行","第六行","第七行","第八行","第九行",
-                        "第十行","十一行","十二行","第八行","第九行","第十行","十一行","十二行","第十行","十一行","十二行","第八行","第九行","第十行","十一行","十二行"},
+        ByteArrayOutputStream outputStream = addToPpt(new FileInputStream("F:\\watermark\\1218\\信界-业务安全解决方案V1.0.1007.03.pptx"),
+                new String[]{"这是pptx水印四", "第二行", "第三行"},
                 14,
                 "#FF0000",
                 100,
                 45);
 
-        outputStream.writeTo(new FileOutputStream("F:\\watermark\\success\\result\\pptx.pptx"));
+        outputStream.writeTo(new FileOutputStream("F:\\watermark\\1218\\result\\信界-业务安全解决方案V1.0.1007.03.pptx"));
     }
 
     public static ByteArrayOutputStream addToPpt(InputStream inputStream, String[] textArr,

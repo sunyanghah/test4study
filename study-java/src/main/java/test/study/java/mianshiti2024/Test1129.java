@@ -6,6 +6,9 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author sun yang
  * @date 2024/11/29
@@ -30,7 +33,14 @@ public class Test1129 {
     }
 
     public static void main(String[] args) {
-        System.out.println(getAngleValue(180));
+
+        List<String> waterTextList = new ArrayList<>();
+        waterTextList.add("111");
+        waterTextList.add("222");
+        waterTextList.add("333");
+
+        String[] strings = waterTextList.toArray(new String[0]);
+        System.out.println(strings);
     }
 
 }

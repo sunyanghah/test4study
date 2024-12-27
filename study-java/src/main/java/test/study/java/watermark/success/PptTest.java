@@ -8,6 +8,7 @@ import com.spire.presentation.drawing.BackgroundType;
 import com.spire.presentation.drawing.FillFormatType;
 import com.spire.presentation.drawing.IImageData;
 import com.spire.presentation.drawing.PictureFillType;
+import test.study.java.watermark.WatermarkUtil;
 
 import java.awt.*;
 import java.awt.geom.Dimension2D;

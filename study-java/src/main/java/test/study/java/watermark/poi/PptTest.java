@@ -1,7 +1,7 @@
 package test.study.java.watermark.poi;
 
+import org.apache.poi.hslf.usermodel.*;
 import org.apache.poi.sl.usermodel.PictureData.PictureType;
-import org.apache.poi.xslf.usermodel.*;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -10,7 +10,9 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author sun yang
@@ -19,21 +21,41 @@ import java.io.IOException;
 public class PptTest {
 
     public static void main(String[] args) throws Exception{
-        // create a ppt
-        XMLSlideShow ppt = new XMLSlideShow(new FileInputStream("F:\\watermark\\1119\\ppttt.ppt"));
-        //生成水印
-        byte[] waterMarkBytes = createWaterMark("这是ppt水印", 200, 150, new Color(255, 0, 0, 100)
+
+        String inFilePath = "F:\\watermark\\poi\\ppt.ppt";
+        String outFilePath = "F:\\watermark\\poi\\result\\ppt.ppt";
+//
+//        String inFilePath = "F:\\watermark\\libre\\ppt.ppt";
+//        String outFilePath = "F:\\watermark\\libre\\result\\ppt.ppt";
+
+// 创建一个 .ppt 文件或打开已有文件
+        HSLFSlideShow ppt = new HSLFSlideShow(new FileInputStream("F:\\watermark\\poi\\ppt.ppt"));
+
+        List<HSLFSlideMaster> slideMasters = ppt.getSlideMasters();
+
+        // 设置图片大小和位置，使其覆盖整个幻灯片
+        Dimension pageSize = ppt.getPageSize();
+
+        // 加载背景图片
+        byte[] pictureData = createWaterMark("这是pptx水印", pageSize.width, pageSize.height, new Color(255, 0, 0, 100)
                 , new Font("微软雅黑", Font.BOLD, 20));
 
-        XSLFPictureData pd = ppt.addPicture(waterMarkBytes, PictureType.JPEG);
-        XSLFSlideMaster slideMaster = ppt.getSlideMasters().get(0);
-        XSLFSlideLayout slidelayout = slideMaster.getLayout(SlideLayout.TITLE_AND_CONTENT);
-        XSLFPictureShape ps = slidelayout.createPicture(pd);
-        ps.setAnchor(new Rectangle2D.Double(100, 100, 400, 400));
+        // 将图片添加到幻灯片中
+        HSLFPictureData pd = ppt.addPicture(pictureData, PictureType.PNG);
+//        HSLFPictureShape pictureShape = new HSLFPictureShape(pd);
+//        pictureShape.setAnchor(new Rectangle(0, 0, pageSize.width, pageSize.height));
 
-//        FileOutputStream fos = new FileOutputStream("F:\\watermark\\1119\\ppttt.ppt");
-//        ppt.write(fos);
-//        fos.close();
+        for (HSLFSlideMaster master : slideMasters) {
+            HSLFObjectShape oleShape = master.createOleShape(pd);
+            oleShape.setAnchor(new Rectangle(0, 0, pageSize.width, pageSize.height));
+        }
+
+        // 保存文件
+        try (FileOutputStream out = new FileOutputStream("F:\\watermark\\poi\\result\\ppt.ppt")) {
+            ppt.write(out);
+        }
+
+        System.out.println("PPT created with background image!");
     }
 
     /**

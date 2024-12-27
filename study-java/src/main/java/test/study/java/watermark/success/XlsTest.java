@@ -7,6 +7,7 @@ import org.apache.poi.hssf.record.StandardRecord;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.util.LittleEndianOutput;
+import test.study.java.watermark.WatermarkUtil;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -64,11 +65,11 @@ public class XlsTest {
         @SuppressWarnings("unchecked")
         List<RecordBase> records = (List<RecordBase>)_records.get(internalsheet);
         Font font = new Font("微软雅黑", Font.PLAIN, fontSize);
-        int imageSize = WatermarkUtil.calculateSize(textArr, font, rotate);
+        int[] imageSize = WatermarkUtil.calculateSize(textArr, font, rotate);
         //生成水印
         BufferedImage bufferedImage = WatermarkUtil.createSingleWaterMark(
                 WatermarkUtil.transText(textArr),
-                imageSize, imageSize,
+                imageSize[0], imageSize[1],
                 WatermarkUtil.hexStringToColor(fontColor,opacity),
                 font,
                 rotate);

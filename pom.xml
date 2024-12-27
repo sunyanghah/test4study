@@ -60,6 +60,7 @@
         <module>study-cdp</module>
         <module>study-cdp2</module>
         <module>study-jna</module>
+        <module>study-depend</module>
     </modules>
 
     <properties>

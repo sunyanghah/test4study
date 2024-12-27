@@ -40,8 +40,8 @@ public class DocxTest {
 
 
     public static void main(String[] args) {
-        waterMarkDocXDocument("F:\\watermark\\新建 DOCX 文档.docx",
-                "F:\\watermark\\新建 DOCX 文档_watermark.docx",
+        waterMarkDocXDocument("F:\\watermark\\poi\\docx.docx",
+                "F:\\watermark\\poi\\result\\docx.docx",
                 "水印测试");
     }
 

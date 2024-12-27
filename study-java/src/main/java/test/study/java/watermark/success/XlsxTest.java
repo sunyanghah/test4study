@@ -4,6 +4,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFRelation;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import test.study.java.watermark.WatermarkUtil;
 
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
@@ -32,11 +33,11 @@ public class XlsxTest {
                                                  int fontSize, String fontColor, int opacity, int rotate) throws Exception {
         XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
         Font font = new Font("微软雅黑", Font.PLAIN, fontSize);
-        int imageSize = WatermarkUtil.calculateSize(textArr, font, rotate);
+        int[] imageSize = WatermarkUtil.calculateSize(textArr, font, rotate);
         //生成水印
         byte[] waterMarkBytes = WatermarkUtil.createSingleWaterMarkOfBytes(
                 WatermarkUtil.transText(textArr),
-                imageSize, imageSize,
+                imageSize[0], imageSize[1],
                 WatermarkUtil.hexStringToColor(fontColor,opacity),
                 font,
                 rotate);

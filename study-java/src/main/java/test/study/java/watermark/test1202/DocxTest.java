@@ -7,6 +7,7 @@ import com.spire.doc.documents.ShapeType;
 import com.spire.doc.documents.TextWrappingStyle;
 import com.spire.doc.fields.DocPicture;
 import com.spire.doc.fields.ShapeObject;
+import test.study.java.watermark.WatermarkUtil;
 
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
@@ -44,10 +45,10 @@ public class DocxTest {
         DocPicture picture = new DocPicture(doc);
 
         Font font = new Font("微软雅黑", Font.PLAIN, fontSize);
-        int imageSize = WatermarkUtil.calculateSize(textArr, font, rotate);
+        int[] imageSize = WatermarkUtil.calculateSize(textArr, font, rotate);
 
         byte[] imageBytes = WatermarkUtil.createSingleWaterMarkOfBytes(WatermarkUtil.transText(textArr),
-                imageSize, imageSize,
+                imageSize[0], imageSize[1],
                 WatermarkUtil.hexStringToColor(fontColor,opacity)
                 ,font ,rotate);
 
@@ -77,10 +78,10 @@ public class DocxTest {
 
             PageSetup pageSetup = doc.getSections().get(0).getPageSetup();
             float clientWidth = pageSetup.getClientWidth();
-            int widthNum = (int)(clientWidth / imageSize) + 1;
+            int widthNum = (int)(clientWidth / imageSize[0]) + 1;
 
             float clientHeight = pageSetup.getClientHeight();
-            int heightNum = (int)(clientHeight / imageSize) + 1;
+            int heightNum = (int)(clientHeight / imageSize[1]) + 1;
 
             for (int p = 0; p < heightNum; p++) {
 
@@ -92,10 +93,10 @@ public class DocxTest {
                     picture.setHorizontalPosition(x);
                     paragrapg1.getChildObjects().add(picture);
 
-                    verticalPosition += imageSize + spaceHeight;
+                    verticalPosition += imageSize[1] + spaceHeight;
                 }
 
-                x += imageSize + spaceWidth;
+                x += imageSize[0] + spaceWidth;
 
             }
         }
