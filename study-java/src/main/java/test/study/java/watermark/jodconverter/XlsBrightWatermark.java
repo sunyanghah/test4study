@@ -25,17 +25,17 @@ import java.util.function.Supplier;
 
 public class XlsBrightWatermark {
 
-//    public static void main(String[] args) throws Exception {
-//        ByteArrayOutputStream outputStream = addToXls(new FileInputStream("F:\\watermark\\success\\xls.xls"),
-//                new String[]{"这是xls水印手动阀萨芬广东发斯蒂芬我惹我文身断发士大夫", "第二行", "第三行"},
-//                16,
-//                "#FF0000",
-//                100,
-//                45);
-//
-//        outputStream.writeTo(new FileOutputStream("F:\\watermark\\success\\result\\xls.xls"));
-//
-//    }
+    public static void main(String[] args) throws Exception {
+        ByteArrayOutputStream outputStream = addToXls(new FileInputStream("F:\\watermark\\success\\xls.xls"),
+                new String[]{"这是xls水", "第二行", "第三行"},
+                16,
+                "#FF0000",
+                100,
+                45);
+
+        outputStream.writeTo(new FileOutputStream("F:\\watermark\\success\\result\\xls.xls"));
+
+    }
 
     /**
      * Add watermark to xls
@@ -160,7 +160,9 @@ public class XlsBrightWatermark {
         // get file byte data in type BufferedImage.TYPE_3BYTE_BGR
         BufferedImage image = new BufferedImage(in.getWidth(), in.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
         Graphics2D graphics = image.createGraphics();
+        graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.0f));
         graphics.drawImage(in, null, 0, 0);
+        graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
         graphics.dispose();
 
         // calculate row size (c)

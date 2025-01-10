@@ -118,8 +118,24 @@ public class XlsTest {
         // get file byte data in type BufferedImage.TYPE_3BYTE_BGR
         BufferedImage image = new BufferedImage(in.getWidth(), in.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
         Graphics2D graphics = image.createGraphics();
+
+        graphics.setComposite(AlphaComposite.SrcOver);
+        graphics.setBackground(Color.WHITE);
+        graphics.setColor(Color.WHITE);
+
         graphics.drawImage(in, null, 0, 0);
         graphics.dispose();
+
+
+        for (int y = 0; y < image.getHeight(); y++) {
+            for (int x = 0; x < image.getWidth(); x++) {
+                int rgba = image.getRGB(x, y);
+                int alpha = (rgba >> 24) & 0xFF;
+                if (alpha == 0) { // 如果完全透明
+                    image.setRGB(x, y, 0xFFFFFFFF); // 替换为白色
+                }
+            }
+        }
 
         // calculate row size (c)
         int rowSize = ((24 * image.getWidth() + 31) / 32) * 4;

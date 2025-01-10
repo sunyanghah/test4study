@@ -25,14 +25,14 @@ public class PptImageTest {
     public static java.util.List< Class<? extends HSLFShape>> needHandleShapes = Arrays.asList(HSLFPictureShape.class, MovieShape.class, HSLFTable.class);
 
     public static void main(String[] args) throws Exception {
-        ByteArrayOutputStream outputStream = addToPpt(new FileInputStream("F:\\watermark\\poi\\ppt.ppt"),
+        ByteArrayOutputStream outputStream = addToPpt(new FileInputStream("F:\\watermark\\libre\\ppt.ppt"),
                 new String[]{"这是pptx水印四", "第二行", "第三行"},
                 14,
                 "#0000ff",
                 100,
                 45);
 
-        outputStream.writeTo(new FileOutputStream("F:\\watermark\\poi\\result\\ppt.ppt"));
+        outputStream.writeTo(new FileOutputStream("F:\\watermark\\libre\\result\\ppt.ppt"));
     }
 
     /**
