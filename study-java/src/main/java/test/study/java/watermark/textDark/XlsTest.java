@@ -61,24 +61,24 @@ public class XlsTest {
                             cell.setCellStyle(cellStyle);
                         }
                     }
-                    if (cell.getCellType() == CellType.NUMERIC){
-                        //获取单元格的值
-                        double numericCellValue = cell.getNumericCellValue();
-
-                        String cellValue = String.valueOf(numericCellValue);
-
-                        int centerPos = cellValue.length()/2;
-
-                        String richTextString = cellValue.substring(0,centerPos) + invisibleWatermark + cellValue.substring(centerPos);
-
-                        //获取样式
-                        HSSFCellStyle cellStyle = cell.getCellStyle();
-                        //更新值 末尾加不可见字符
-                        HSSFRichTextString HssfRichTextString = new HSSFRichTextString(richTextString);
-                        cell.setCellValue(HssfRichTextString);
-                        //设置样式
-                        cell.setCellStyle(cellStyle);
-                    }
+//                    if (cell.getCellType() == CellType.NUMERIC){
+//                        //获取单元格的值
+//                        double numericCellValue = cell.getNumericCellValue();
+//
+//                        String cellValue = String.valueOf(numericCellValue);
+//
+//                        int centerPos = cellValue.length()/2;
+//
+//                        String richTextString = cellValue.substring(0,centerPos) + invisibleWatermark + cellValue.substring(centerPos);
+//
+//                        //获取样式
+//                        HSSFCellStyle cellStyle = cell.getCellStyle();
+//                        //更新值 末尾加不可见字符
+//                        HSSFRichTextString HssfRichTextString = new HSSFRichTextString(richTextString);
+//                        cell.setCellValue(HssfRichTextString);
+//                        //设置样式
+//                        cell.setCellStyle(cellStyle);
+//                    }
                 }
             }
         }
@@ -112,7 +112,11 @@ public class XlsTest {
                         String cellValue = cell.getStringCellValue();
                         //判断是否需要加注
                         if (StringUtils.isNotBlank(cellValue)) {
-                            System.out.println("水印内容："+TextDarkUtils.decode(cellValue));
+                            Long decode = TextDarkUtils.decode(cellValue);
+                            if (decode != null) {
+                                System.out.println("水印内容："+decode);
+                                return;
+                            }
                         }
                     }
                 }

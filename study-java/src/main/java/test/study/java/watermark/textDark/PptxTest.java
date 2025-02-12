@@ -38,11 +38,12 @@ public class PptxTest {
                     for (XSLFTextParagraph textParagraph : textParagraphs) {
                         List<XSLFTextRun> textRuns = textParagraph.getTextRuns();
                         if (textRuns != null && textRuns.size() > 0){
-                            XSLFTextRun xslfTextRun = textRuns.get(0);
-                            String rawText = xslfTextRun.getRawText();
-                            int centerPos = rawText.length()/2;
-                            String richTextString = rawText.substring(0,centerPos) + invisibleWatermark + rawText.substring(centerPos);
-                            xslfTextRun.setText(richTextString);
+                            for (XSLFTextRun textRun : textRuns) {
+                                String rawText = textRun.getRawText();
+                                int centerPos = rawText.length()/2;
+                                String richTextString = rawText.substring(0,centerPos) + invisibleWatermark + rawText.substring(centerPos);
+                                textRun.setText(richTextString);
+                            }
                         }
                     }
                 }

@@ -24,7 +24,7 @@ public class Trans {
 //        trans("F:\\watermark\\libre\\docx.docx","F:\\watermark\\libre\\doc.doc");
 //        trans("F:\\watermark\\libre\\pptx.pptx","F:\\watermark\\libre\\ppt.ppt");
 
-//        trans("F:\\watermark\\libre\\result\\docx.docx","F:\\watermark\\libre\\result\\doc.doc");
+        trans("F:\\watermark\\libre\\result\\docx.docx","F:\\watermark\\libre\\result\\doc.doc");
 //        trans("F:\\watermark\\libre\\result\\pptx.pptx","F:\\watermark\\libre\\result\\ppt.ppt");
     }
 

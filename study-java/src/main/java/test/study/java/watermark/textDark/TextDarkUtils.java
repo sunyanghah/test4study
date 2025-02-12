@@ -57,6 +57,7 @@ public class TextDarkUtils {
         char[] chars = text.toCharArray();
         StringBuilder sb = new StringBuilder();
         boolean codeStart = false;
+        boolean codeEnd = false;
         for (int i = 0; i < chars.length; i++) {
             if (chars[i] == CODE4) {
                 codeStart = true;
@@ -69,8 +70,13 @@ public class TextDarkUtils {
                 }
             }
             if (chars[i] == CODE5) {
+                codeEnd = true;
                 break;
             }
+        }
+        // 没有开始或没有结束都不是完整的
+        if (!codeStart || !codeEnd) {
+            return null;
         }
         return sb.toString();
     }
